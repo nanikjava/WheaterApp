@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="side_margin">24dp</dimen>
+
+    <dimen name="mcw_weather_main_textsize">24sp</dimen>
+    <dimen name="mcw_city_textsize">30sp</dimen>
+    <dimen name="mcw_temp_textsize">60sp</dimen>
+
+</resources>
