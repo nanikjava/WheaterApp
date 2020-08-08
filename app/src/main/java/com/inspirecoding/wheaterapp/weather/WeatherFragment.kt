@@ -22,7 +22,6 @@ class WeatherFragment : Fragment()
     private lateinit var binding: WeatherFragmentBinding
 
     private val weatherViewModel by viewModels<WeatherViewModel>()
-    private var isViewPagerInitialized : Boolean = false
 
     override fun onStart()
     {
@@ -58,9 +57,6 @@ class WeatherFragment : Fragment()
                     Timber.d("${_result.data}")
                     _result.data?.let { _listOfCurrentWeather ->
                         initViewPager(_listOfCurrentWeather)
-                        if (!isViewPagerInitialized)
-                        {
-                        }
                     }
                 }
                 Status.LOADING -> {
@@ -82,7 +78,5 @@ class WeatherFragment : Fragment()
         TabLayoutMediator(binding.tabLayout, binding.viewPager2) { tab, position ->
 //            tab.text = listOfCurrentWeather[position].name
         }.attach()
-
-        isViewPagerInitialized = true
     }
 }

@@ -8,6 +8,7 @@ import com.inspirecoding.wheaterapp.repository.local.ForecastWeatherDao
 import com.inspirecoding.wheaterapp.repository.remote.BaseDataSource
 import com.inspirecoding.wheaterapp.repository.remote.WeatherServiceAPI
 import com.inspirecoding.wheaterapp.util.Constants
+import retrofit2.Response
 import javax.inject.Inject
 
 class WeatherRepositoryImpl @Inject constructor (
@@ -49,7 +50,7 @@ class WeatherRepositoryImpl @Inject constructor (
         // Refresh the list of articles from network
         networkCall = {
             getResult {
-                val weatherUrl =   java.lang.String.format(
+                val weatherUrl =   java.lang.String.format (
                     "weather?q=%s&units=%s&appid=%s",
                     "Las Vegas", "metric", Constants.API_KEY
                 )
@@ -62,6 +63,10 @@ class WeatherRepositoryImpl @Inject constructor (
                 currentWeatherDao.insertAllCurrentWeather(_currentWeather)
             }
         }
-
     )
+
+    override suspend fun getForecastWeatherResponse(endUrl: String): Response<ForecastWeather>
+    {
+        TODO("Not yet implemented")
+    }
 }
