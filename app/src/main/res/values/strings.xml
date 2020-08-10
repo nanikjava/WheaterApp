@@ -5,6 +5,12 @@
     
     <string name="temperature_with_degree">%.0f°</string>
 
+    <string name="current_weather">Current weather</string>
+    <string name="add_city">Add city</string>
+    <string name="selected_cities">Selected cities</string>
+
+    <string name="error_occurred">Oops … something went wrong</string>
+
 
     <!-- Thunderstorm -->
     <string name="thunderstorm_with_light_rain">Thunderstorm with\nlight rain</string>
@@ -62,10 +68,15 @@
     <string name="squalls">Squalls</string>
     <string name="tornado">Tornado</string>
     <!-- Clear -->
-    <string name="clear_sky">Clear</string>
+    <string name="clear_sky">Clear sky</string>
     <!-- Clouds -->
     <string name="few_clouds">Few clouds</string>
     <string name="scattered_clouds">Scattered clouds</string>
     <string name="broken_clouds">Broken clouds</string>
     <string name="overcast_clouds">Overcast clouds</string>
+    <string name="search_city">Search city</string>
+
+    <string name="no_city_found">No city found</string>
+    <string name="result">Result</string>
+    <string name="for_example_budapest_hu">For example: Budapest, HU</string>
 </resources>

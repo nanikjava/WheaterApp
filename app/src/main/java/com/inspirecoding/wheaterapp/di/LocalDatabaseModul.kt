@@ -18,9 +18,9 @@ class LocalDatabaseModul
 
     @Singleton
     @Provides
-    fun providesCurrentWeatherDao (databse: WeatherDatabase) = databse.currentWeatherDao()
+    fun providesCurrentWeatherDao (database: WeatherDatabase) = database.currentWeatherDao()
 
     @Singleton
     @Provides
-    fun providesForecastWeatherDao (databse: WeatherDatabase) = databse.forecastWeatherDao()
+    fun providesForecastWeatherDao (database: WeatherDatabase) = database.forecastWeatherDao()
 }

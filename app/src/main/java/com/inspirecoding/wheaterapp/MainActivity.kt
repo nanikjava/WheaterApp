@@ -1,13 +1,15 @@
 package com.inspirecoding.wheaterapp
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity()
@@ -36,5 +38,19 @@ class MainActivity : AppCompatActivity()
             navController,
             appBarConfiguration
         )
+
+        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            if (destination.id == R.id.weatherFragment)
+            {
+                toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
+            }
+            if(destination.id == R.id.listOfCitiesFragment
+                || destination.id == R.id.addCityFragment
+                || destination.id == R.id.settingsFragment)
+            {
+                toolbar.setNavigationIcon(R.drawable.ic_backarrow_blue_24)
+                toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
+            }
+        }
     }
 }

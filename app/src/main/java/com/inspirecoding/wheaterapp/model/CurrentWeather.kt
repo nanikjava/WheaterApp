@@ -9,9 +9,6 @@ import kotlin.collections.List
 
 @Entity(tableName = "CurrentWeather")
 data class CurrentWeather(
-//
-//    @PrimaryKey(autoGenerate = true)
-//    var currentWeatherId: Int = 1,
 
     @SerializedName("name")
     @ColumnInfo(name = "name")
@@ -19,6 +16,9 @@ data class CurrentWeather(
     @PrimaryKey
     val name: String = "",
 
+
+
+    var position: Int? = 0,
 
     @SerializedName("coord")
     @Embedded

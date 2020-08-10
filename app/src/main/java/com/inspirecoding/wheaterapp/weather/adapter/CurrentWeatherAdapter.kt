@@ -9,11 +9,26 @@ import com.inspirecoding.wheaterapp.R
 import com.inspirecoding.wheaterapp.databinding.ItemCurrentweatherBinding
 import com.inspirecoding.wheaterapp.model.CurrentWeather
 import com.inspirecoding.wheaterapp.util.WeatherDescs
+import timber.log.Timber
 
 class CurrentWeatherAdapter (
-    private val listOfCurrentWeather: List<CurrentWeather>
+    val listOfCurrentWeather: MutableList<CurrentWeather>
 ) : RecyclerView.Adapter<CurrentWeatherAdapter.CurrentWeatherViewHolder>()
 {
+    fun addNewCurrentWeather(currentWeather: CurrentWeather)
+    {
+        listOfCurrentWeather.add(currentWeather)
+        notifyItemChanged(0)
+    }
+    fun updateNewCurrentWeather(currentWeather: CurrentWeather)
+    {
+        val index = listOfCurrentWeather.indexOfFirst {
+            it.name == currentWeather.name
+        }
+        listOfCurrentWeather[index] = currentWeather
+        notifyItemChanged(index)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrentWeatherViewHolder
     {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -28,20 +43,20 @@ class CurrentWeatherAdapter (
 
     override fun getItemCount() = listOfCurrentWeather.size
 
-    override fun onViewAttachedToWindow(holder: CurrentWeatherViewHolder)
-    {
-        holder.setIsRecyclable(false)
-        super.onViewAttachedToWindow(holder)
-    }
-    override fun getItemViewType(position: Int): Int
-    {
-        return position
-    }
-    override fun onViewDetachedFromWindow(holder: CurrentWeatherViewHolder)
-    {
-        holder.setIsRecyclable(true)
-        super.onViewDetachedFromWindow(holder)
-    }
+//    override fun onViewAttachedToWindow(holder: CurrentWeatherViewHolder)
+//    {
+//        holder.setIsRecyclable(false)
+//        super.onViewAttachedToWindow(holder)
+//    }
+//    override fun getItemViewType(position: Int): Int
+//    {
+//        return position
+//    }
+//    override fun onViewDetachedFromWindow(holder: CurrentWeatherViewHolder)
+//    {
+//        holder.setIsRecyclable(true)
+//        super.onViewDetachedFromWindow(holder)
+//    }
 
     override fun onBindViewHolder(currentWeatherViewHolder: CurrentWeatherViewHolder, position: Int)
     {

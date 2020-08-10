@@ -12,7 +12,7 @@ import com.inspirecoding.wheaterapp.util.ListOfWeatherConverter
 
 @Database (
     entities = [CurrentWeather::class, ForecastWeather::class],
-    version = 7)
+    version = 11)
 @TypeConverters(ListOfWeatherConverter::class, ListOfListConverter::class)
 abstract class WeatherDatabase : RoomDatabase()
 {

@@ -1,18 +1,20 @@
 package com.inspirecoding.wheaterapp.weather
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.observe
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import com.inspirecoding.wheaterapp.MainActivity
+import com.inspirecoding.wheaterapp.R
 import com.inspirecoding.wheaterapp.weather.adapter.CurrentWeatherAdapter
 import com.inspirecoding.wheaterapp.databinding.WeatherFragmentBinding
 import com.inspirecoding.wheaterapp.model.CurrentWeather
 import com.inspirecoding.wheaterapp.util.Status
+import com.inspirecoding.wheaterapp.util.observeOnce
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -22,6 +24,8 @@ class WeatherFragment : Fragment()
     private lateinit var binding: WeatherFragmentBinding
 
     private val weatherViewModel by viewModels<WeatherViewModel>()
+
+    private lateinit var currentWeatherAdapter: CurrentWeatherAdapter
 
     override fun onStart()
     {
@@ -39,24 +43,58 @@ class WeatherFragment : Fragment()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?)
     {
         super.onViewCreated(view, savedInstanceState)
+
+        setupListOfSelectedCitiesObserver()
+
+        Timber.d("${binding.viewPager2.getChildAt(0)}")
+    }
+
+    private fun setupListOfSelectedCitiesObserver()
+    {
+        weatherViewModel.listOfCurrentWeather.observeOnce(viewLifecycleOwner, Observer { _listOfCities ->
+            if (_listOfCities.size == 0)
+            {
+                navigateToAddCityFragment()
+            }
+            else
+            {
+                for (selectedCity in _listOfCities)
+                {
+                    getCurrentWeatherObserver(selectedCity)
+                }
+            }
+        })
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?)
     {
         super.onActivityCreated(savedInstanceState)
 
-        setupCurrentWeatherObserver()
+        setHasOptionsMenu(true)
     }
 
-    private fun setupCurrentWeatherObserver()
+    private fun getCurrentWeatherObserver(currentWeather: CurrentWeather)
     {
-        weatherViewModel.currentWeatherLiveData.observe(viewLifecycleOwner) { _result ->
+        weatherViewModel.getCurrentWeather(currentWeather).observe(viewLifecycleOwner) { _result ->
             when (_result.status)
             {
                 Status.SUCCESS -> {
                     Timber.d("${_result.data}")
-                    _result.data?.let { _listOfCurrentWeather ->
-                        initViewPager(_listOfCurrentWeather)
+                    _result.data?.let { _currentWeather ->
+                        if(this::currentWeatherAdapter.isInitialized)
+                        {
+                            val addedCurrentWeather = currentWeatherAdapter.listOfCurrentWeather.find {
+                                it.name == _currentWeather.name
+                            }
+                            if(addedCurrentWeather != null)
+                            {
+                                currentWeatherAdapter.updateNewCurrentWeather(_currentWeather)
+                            }
+                            else
+                            {
+                                currentWeatherAdapter.addNewCurrentWeather(_currentWeather)
+                            }
+                        }
                     }
                 }
                 Status.LOADING -> {
@@ -69,14 +107,41 @@ class WeatherFragment : Fragment()
         }
     }
 
-    private fun initViewPager(listOfCurrentWeather: List<CurrentWeather>)
+    private fun initViewPager(listOfCities: MutableList<CurrentWeather>)
     {
-        binding.viewPager2.adapter = CurrentWeatherAdapter(listOfCurrentWeather).apply {
-            setHasStableIds(true)
+        currentWeatherAdapter = CurrentWeatherAdapter(listOfCities)
+        binding.viewPager2.apply {
+            adapter = currentWeatherAdapter
         }
 
-        TabLayoutMediator(binding.tabLayout, binding.viewPager2) { tab, position ->
-//            tab.text = listOfCurrentWeather[position].name
-        }.attach()
+        TabLayoutMediator(binding.tabLayout, binding.viewPager2) { tab, position -> }.attach()
+    }
+    private fun navigateToAddCityFragment()
+    {
+        findNavController().navigate(R.id.action_weatherFragment_to_addCityFragment)
+    }
+    private fun navigateToListOfCitiesFragment()
+    {
+        findNavController().navigate(R.id.action_weatherFragment_to_listOfCitiesFragment)
+    }
+    override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater)
+    {
+        menuInflater.inflate(R.menu.menu_cities_settings, menu)
+        super.onCreateOptionsMenu(menu, menuInflater)
+    }
+    override fun onOptionsItemSelected(item: MenuItem): Boolean
+    {
+        return when(item.itemId)
+        {
+            R.id.item_cities -> {
+                navigateToListOfCitiesFragment()
+                return true
+            }
+            R.id.item_settings -> {
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+
     }
 }

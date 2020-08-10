@@ -11,10 +11,7 @@ class WeatherViewModel @ViewModelInject constructor (
     private val weatherRepository: WeatherRepository
 ) : ViewModel()
 {
-    val currentWeatherLiveData by lazy {
-        weatherRepository.observeListOfCurrentWeather()
-    }
+    val listOfCurrentWeather: LiveData<List<CurrentWeather>> = weatherRepository.getAllCurrentWeather()
 
-    private val _listOfCurrentWeather = MutableLiveData<List<CurrentWeather>>()
-    val listOfCurrentWeather: LiveData<List<CurrentWeather>> = _listOfCurrentWeather
+    fun getCurrentWeather(currentWeather: CurrentWeather) = weatherRepository.observeCurrentWeather(currentWeather)
 }

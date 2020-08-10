@@ -25,13 +25,13 @@
             <Layout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/light_grey" />
+                android:background="@color/grey" />
         </Constraint>
         <Constraint android:id="@+id/view_background_blue">
             <Layout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/light_grey" />
+                android:background="@color/grey" />
             <PropertySet
                 android:alpha="0"/>
         </Constraint>

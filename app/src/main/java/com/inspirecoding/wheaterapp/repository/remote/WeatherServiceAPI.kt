@@ -9,7 +9,7 @@ import retrofit2.http.Url
 interface WeatherServiceAPI
 {
     @GET
-    suspend fun getCurrentWeatherResponse (
+    suspend fun getCurrentWeather (
         @Url endUrl: String
     ) : Response<CurrentWeather>
     @GET

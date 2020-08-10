@@ -10,16 +10,17 @@ import retrofit2.http.Url
 interface WeatherRepository
 {
     // Remote
-    suspend fun getCurrentWeatherResponse (@Url endUrl: String) : CurrentWeather
+    suspend fun getCurrentWeather (@Url endUrl: String) : Resource<CurrentWeather>
     suspend fun getForecastWeatherResponse (@Url endUrl: String) : Response<ForecastWeather>
+    fun getTableSize() : LiveData<Int>
 
     // CurrentWeather
-    suspend fun insertAllCurrentWeather (listOfWeather : List<CurrentWeather>)
+    suspend fun insertCurrentWeather (currentWeather : CurrentWeather) : Long
     fun getAllCurrentWeather() : LiveData<List<CurrentWeather>>
 
-    // ForecastWeatherDao
+    // ForecastWeather
     suspend fun insertAllForecastWeather (listOfForecastWeather : List<ForecastWeather>)
     fun getAllForecastWeather() : LiveData<List<ForecastWeather>>
 
-    fun observeListOfCurrentWeather() : LiveData<Resource<List<CurrentWeather>>>
+    fun observeCurrentWeather(currentWeather: CurrentWeather) : LiveData<Resource<CurrentWeather>>
 }

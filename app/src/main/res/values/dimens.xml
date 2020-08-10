@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <dimen name="icon_margin">12dp</dimen>
     <dimen name="side_margin">24dp</dimen>
+    <dimen name="add_city_result_text_margin">36dp</dimen>
+    <dimen name="toolbar_margin">16dp</dimen>
 
     <dimen name="mcw_weather_main_textsize">24sp</dimen>
     <dimen name="mcw_city_textsize">30sp</dimen>
     <dimen name="mcw_temp_textsize">60sp</dimen>
+    <dimen name="add_city_result_text_size">24sp</dimen>
+    <dimen name="mcw_radius">12dp</dimen>
+    <dimen name="mcw_elevation">6dp</dimen>
+
 
 </resources>

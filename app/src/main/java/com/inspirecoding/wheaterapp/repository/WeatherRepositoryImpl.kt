@@ -1,14 +1,17 @@
 package com.inspirecoding.wheaterapp.repository
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.inspirecoding.wheaterapp.model.CurrentWeather
 import com.inspirecoding.wheaterapp.model.ForecastWeather
+import com.inspirecoding.wheaterapp.model.Resource
 import com.inspirecoding.wheaterapp.repository.local.CurrentWeatherDao
 import com.inspirecoding.wheaterapp.repository.local.ForecastWeatherDao
 import com.inspirecoding.wheaterapp.repository.remote.BaseDataSource
 import com.inspirecoding.wheaterapp.repository.remote.WeatherServiceAPI
 import com.inspirecoding.wheaterapp.util.Constants
 import retrofit2.Response
+import timber.log.Timber
 import javax.inject.Inject
 
 class WeatherRepositoryImpl @Inject constructor (
@@ -17,20 +20,18 @@ class WeatherRepositoryImpl @Inject constructor (
     private val forecastWeatherDao: ForecastWeatherDao
 ) : WeatherRepository, BaseDataSource()
 {
-    override suspend fun getCurrentWeatherResponse(endUrl: String): CurrentWeather
+    override suspend fun getCurrentWeather(endUrl: String) : Resource<CurrentWeather>
     {
-        TODO("Not yet implemented")
+        return getResult {
+            weatherServiceAPI.getCurrentWeather(endUrl)
+        }
     }
 
-    override suspend fun insertAllCurrentWeather(listOfWeather: List<CurrentWeather>)
-    {
-        TODO("Not yet implemented")
-    }
+    override fun getTableSize() = currentWeatherDao.getTableSize()
 
-    override fun getAllCurrentWeather(): LiveData<List<CurrentWeather>>
-    {
-        TODO("Not yet implemented")
-    }
+    override suspend fun insertCurrentWeather(currentWeather: CurrentWeather) = currentWeatherDao.insertCurrentWeather(currentWeather)
+
+    override fun getAllCurrentWeather(): LiveData<List<CurrentWeather>> = currentWeatherDao.getAllCurrentWeather()
 
     override suspend fun insertAllForecastWeather(listOfForecastWeather: List<ForecastWeather>)
     {
@@ -42,25 +43,26 @@ class WeatherRepositoryImpl @Inject constructor (
         TODO("Not yet implemented")
     }
 
-    override fun observeListOfCurrentWeather() = resultLiveData(
+    override fun observeCurrentWeather(currentWeather: CurrentWeather) = resultLiveData(
         // Get list of articles from Room
         databaseQuery = {
-            currentWeatherDao.getAllCurrentWeather()
+            currentWeatherDao.getCurrentWeather(currentWeather.name)
         },
         // Refresh the list of articles from network
         networkCall = {
             getResult {
                 val weatherUrl =   java.lang.String.format (
                     "weather?q=%s&units=%s&appid=%s",
-                    "Las Vegas", "metric", Constants.API_KEY
+                    currentWeather.name, "metric", Constants.API_KEY
                 )
-                weatherServiceAPI.getCurrentWeatherResponse(weatherUrl)
+                weatherServiceAPI.getCurrentWeather(weatherUrl)
             }
         },
         // If the network call was successful then update the list in Room
         saveCallResult = {
             it.let { _currentWeather ->
-                currentWeatherDao.insertAllCurrentWeather(_currentWeather)
+                _currentWeather.position = currentWeather.position
+                currentWeatherDao.insertCurrentWeather(_currentWeather)
             }
         }
     )
