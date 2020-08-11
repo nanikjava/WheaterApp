@@ -38,6 +38,8 @@ class WeatherRepositoryImpl @Inject constructor (
         return currentWeatherDao.updateCurrentWeather(currentWeather)
     }
 
+    override suspend fun deleteCurrentWeather (currentWeather: CurrentWeather) = currentWeatherDao.deleteCurrentWeather(currentWeather)
+
     override suspend fun insertAllForecastWeather(listOfForecastWeather: List<ForecastWeather>)
     {
         TODO("Not yet implemented")

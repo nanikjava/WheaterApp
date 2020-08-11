@@ -55,8 +55,8 @@ class AddCityFragment : Fragment()
             {
                 SUCCESS -> {
                     _resource.data?.let { _foundCity ->
-//                        val city = "${_foundCity.name}, ${_foundCity.sys.country}"
-//                        binding.tvCity.text = city
+                        val city = "${_foundCity.name}, ${_foundCity.sys.country}"
+                        binding.tvCity.text = city
                     }
                     setProgressBarVisibility(isVisible = false)
                 }

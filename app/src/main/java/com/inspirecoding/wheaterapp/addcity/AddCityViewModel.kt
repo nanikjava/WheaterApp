@@ -28,18 +28,18 @@ class AddCityViewModel @ViewModelInject constructor (
         try
         {
             val endUrl = Constants.createEndUrl(city)
-//            foundCurrentWeatherOfCity = weatherRepository.getCurrentWeather(endUrl).data
-//            if (foundCurrentWeatherOfCity == null)
-//            {
-//                _hasCityFound.postValue(false)
-//                _resultText.postValue(applicationContext.getString(R.string.no_city_found))
-//            }
-//            else
-//            {
-//                _hasCityFound.postValue(true)
-//                _resultText.postValue(applicationContext.getString(R.string.result))
-//            }
-//            emit(Resource.success(data = foundCurrentWeatherOfCity))
+            foundCurrentWeatherOfCity = weatherRepository.getCurrentWeather(endUrl).data
+            if (foundCurrentWeatherOfCity == null)
+            {
+                _hasCityFound.postValue(false)
+                _resultText.postValue(applicationContext.getString(R.string.no_city_found))
+            }
+            else
+            {
+                _hasCityFound.postValue(true)
+                _resultText.postValue(applicationContext.getString(R.string.result))
+            }
+            emit(Resource.success(data = foundCurrentWeatherOfCity))
         }
         catch (exception: Exception)
         {

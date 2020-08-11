@@ -16,6 +16,7 @@ interface WeatherRepository
     // CurrentWeather
     suspend fun insertCurrentWeather (currentWeather : CurrentWeather) : Long
     suspend fun updateCurrentWeather (currentWeather: CurrentWeather) : Int
+    suspend fun deleteCurrentWeather (currentWeather: CurrentWeather) : Int
     fun getAllCurrentWeather() : LiveData<List<CurrentWeather>>
 
     fun getTableSize() : LiveData<Int>

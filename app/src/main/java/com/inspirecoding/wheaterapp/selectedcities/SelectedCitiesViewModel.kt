@@ -16,11 +16,22 @@ class SelectedCitiesViewModel @ViewModelInject constructor (
     val allSelectedCities = weatherRepository.getAllCurrentWeather()
     var listOfSelectedCities = mutableListOf<CurrentWeather>()
 
-    fun updateAllCurrentWeather (currentWeather: CurrentWeather)
+    fun updateCurrentWeather (currentWeather: CurrentWeather)
     {
         viewModelScope.launch {
             weatherRepository.updateCurrentWeather(currentWeather)
         }
+    }
+
+    fun deleteCurrentWeather (from: Int)
+    {
+        viewModelScope.launch {
+            weatherRepository.deleteCurrentWeather(listOfSelectedCities[from])
+        }
+
+        listOfSelectedCities.remove(listOfSelectedCities[from])
+
+        setItemsPositionProperty()
     }
 
     fun moveItem(from: Int, to: Int)

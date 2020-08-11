@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -38,11 +37,14 @@ class SelectedCitiesFragment : Fragment()
 
                 return true
             }
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int)
+            {
+                val from = viewHolder.adapterPosition
 
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                deleteListPositions(from)
 
+                updateAllCurrentWeather()
             }
-
             override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int)
             {
                 super.onSelectedChanged(viewHolder, actionState)
@@ -52,7 +54,6 @@ class SelectedCitiesFragment : Fragment()
                     viewHolder?.itemView?.alpha = 0.5f
                 }
             }
-
             override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder)
             {
                 super.clearView(recyclerView, viewHolder)
@@ -89,12 +90,17 @@ class SelectedCitiesFragment : Fragment()
         viewModel.moveItem(from, to)
         selectedCitiesAdapter.notifyItemMoved(from, to)
     }
+    private fun deleteListPositions(from: Int)
+    {
+        viewModel.deleteCurrentWeather(from)
+        selectedCitiesAdapter.notifyItemRemoved(from)
+    }
 
     private fun updateAllCurrentWeather()
     {
         for (currentWeather in viewModel.listOfSelectedCities)
         {
-            viewModel.updateAllCurrentWeather(currentWeather)
+            viewModel.updateCurrentWeather(currentWeather)
         }
     }
 
@@ -107,7 +113,7 @@ class SelectedCitiesFragment : Fragment()
 
     private fun setupListOfSelectedCitiesObserver()
     {
-        viewModel.allSelectedCities.observeOnce(viewLifecycleOwner, Observer {  _listOfCities ->
+        viewModel.allSelectedCities.observe(viewLifecycleOwner, Observer {  _listOfCities ->
             if (_listOfCities.size == 0)
             {
                 navigateToAddCityFragment()
