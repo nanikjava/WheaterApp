@@ -9,6 +9,7 @@ import com.inspirecoding.wheaterapp.R
 import com.inspirecoding.wheaterapp.databinding.ItemCurrentweatherBinding
 import com.inspirecoding.wheaterapp.model.CurrentWeather
 import com.inspirecoding.wheaterapp.util.WeatherDescs
+import com.inspirecoding.wheaterapp.util.convertToDateString
 import timber.log.Timber
 
 class CurrentWeatherAdapter (
@@ -28,6 +29,12 @@ class CurrentWeatherAdapter (
         listOfCurrentWeather[index] = currentWeather
         notifyItemChanged(index)
     }
+    fun updateAllItems(newList: MutableList<CurrentWeather>)
+    {
+        listOfCurrentWeather.clear()
+        listOfCurrentWeather.addAll(newList)
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrentWeatherViewHolder
     {
@@ -43,21 +50,6 @@ class CurrentWeatherAdapter (
 
     override fun getItemCount() = listOfCurrentWeather.size
 
-//    override fun onViewAttachedToWindow(holder: CurrentWeatherViewHolder)
-//    {
-//        holder.setIsRecyclable(false)
-//        super.onViewAttachedToWindow(holder)
-//    }
-//    override fun getItemViewType(position: Int): Int
-//    {
-//        return position
-//    }
-//    override fun onViewDetachedFromWindow(holder: CurrentWeatherViewHolder)
-//    {
-//        holder.setIsRecyclable(true)
-//        super.onViewDetachedFromWindow(holder)
-//    }
-
     override fun onBindViewHolder(currentWeatherViewHolder: CurrentWeatherViewHolder, position: Int)
     {
         currentWeatherViewHolder.bind(listOfCurrentWeather[position])
@@ -72,6 +64,10 @@ class CurrentWeatherAdapter (
         {
             binding.city = currentWeather.name
             binding.main = currentWeather.main
+            currentWeather.dt?.let { _dateTime ->
+                binding.date = (_dateTime * 1000).convertToDateString()
+            }
+
 
             when (currentWeather.weather?.get(0)?.description)
             {
@@ -104,7 +100,7 @@ class CurrentWeatherAdapter (
                     binding.weatherDesc = binding.root.context.getString(R.string.ragged_thunderstorm)
                     binding.ivWeatherIcon.setImageResource(R.drawable.ic_thunderstorm)
                 }
-                WeatherDescs.THUNDERSTORM_WITH_DRIZZLE.desc -> {
+                WeatherDescs.THUNDERSTORM_WITH_LIGHT_DRIZZLE.desc -> {
                     binding.weatherDesc = binding.root.context.getString(R.string.thunderstorm_with_light_drizzle)
                     binding.ivWeatherIcon.setImageResource(R.drawable.ic_thunderstorm)
                 }

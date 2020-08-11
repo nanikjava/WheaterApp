@@ -1,10 +1,7 @@
 package com.inspirecoding.wheaterapp.repository.local
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.inspirecoding.wheaterapp.model.CurrentWeather
 import com.inspirecoding.wheaterapp.util.Status
 
@@ -13,6 +10,9 @@ interface CurrentWeatherDao
 {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCurrentWeather (currentWeather : CurrentWeather) : Long
+
+    @Update
+    suspend fun updateCurrentWeather (currentWeather: CurrentWeather) : Int
 
     @Query ("SELECT * FROM CurrentWeather ORDER BY position ASC")
     fun getAllCurrentWeather() : LiveData<List<CurrentWeather>>

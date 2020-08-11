@@ -9,7 +9,7 @@ import com.inspirecoding.wheaterapp.databinding.ItemCitiesListBinding
 import com.inspirecoding.wheaterapp.model.CurrentWeather
 
 class SelectedCitiesAdapter (
-    private val listOfSelectedCities: List<CurrentWeather>
+    val listOfSelectedCities: List<CurrentWeather>
 ) : RecyclerView.Adapter<SelectedCitiesAdapter.SelectedCitiesViewHolder>()
 {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SelectedCitiesViewHolder

@@ -45,23 +45,26 @@ class WeatherFragment : Fragment()
         super.onViewCreated(view, savedInstanceState)
 
         setupListOfSelectedCitiesObserver()
-
-        Timber.d("${binding.viewPager2.getChildAt(0)}")
     }
 
     private fun setupListOfSelectedCitiesObserver()
     {
-        weatherViewModel.listOfCurrentWeather.observeOnce(viewLifecycleOwner, Observer { _listOfCities ->
+        weatherViewModel.listOfCurrentWeather().observe(viewLifecycleOwner, Observer { _listOfCities ->
             if (_listOfCities.size == 0)
             {
                 navigateToAddCityFragment()
             }
             else
             {
-                for (selectedCity in _listOfCities)
+                if(!::currentWeatherAdapter.isInitialized)
                 {
-                    getCurrentWeatherObserver(selectedCity)
+                    for (selectedCity in _listOfCities)
+                    {
+                        getCurrentWeatherObserver(selectedCity)
+                    }
                 }
+
+                initViewPager(_listOfCities.toMutableList())
             }
         })
     }
@@ -75,17 +78,18 @@ class WeatherFragment : Fragment()
 
     private fun getCurrentWeatherObserver(currentWeather: CurrentWeather)
     {
-        weatherViewModel.getCurrentWeather(currentWeather).observe(viewLifecycleOwner) { _result ->
+        weatherViewModel.getCurrentWeather(currentWeather).observe(viewLifecycleOwner, Observer { _result ->
             when (_result.status)
             {
                 Status.SUCCESS -> {
-                    Timber.d("${_result.data}")
                     _result.data?.let { _currentWeather ->
+                        _currentWeather.position = currentWeather.position
                         if(this::currentWeatherAdapter.isInitialized)
                         {
                             val addedCurrentWeather = currentWeatherAdapter.listOfCurrentWeather.find {
                                 it.name == _currentWeather.name
                             }
+                            Timber.d("$addedCurrentWeather")
                             if(addedCurrentWeather != null)
                             {
                                 currentWeatherAdapter.updateNewCurrentWeather(_currentWeather)
@@ -104,7 +108,7 @@ class WeatherFragment : Fragment()
                     Timber.d("${_result.message}")
                 }
             }
-        }
+        })
     }
 
     private fun initViewPager(listOfCities: MutableList<CurrentWeather>)

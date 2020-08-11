@@ -12,11 +12,13 @@ interface WeatherRepository
     // Remote
     suspend fun getCurrentWeather (@Url endUrl: String) : Resource<CurrentWeather>
     suspend fun getForecastWeatherResponse (@Url endUrl: String) : Response<ForecastWeather>
-    fun getTableSize() : LiveData<Int>
 
     // CurrentWeather
     suspend fun insertCurrentWeather (currentWeather : CurrentWeather) : Long
+    suspend fun updateCurrentWeather (currentWeather: CurrentWeather) : Int
     fun getAllCurrentWeather() : LiveData<List<CurrentWeather>>
+
+    fun getTableSize() : LiveData<Int>
 
     // ForecastWeather
     suspend fun insertAllForecastWeather (listOfForecastWeather : List<ForecastWeather>)

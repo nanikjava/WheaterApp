@@ -11,6 +11,9 @@
             name="main"
             type="com.inspirecoding.wheaterapp.model.Main" />
         <variable
+            name="date"
+            type="String" />
+        <variable
             name="weatherDesc"
             type="String" />
     </data>
@@ -88,6 +91,18 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     android:text="@{weatherDesc}"
                     tools:text="Clouds" />
+
+                <TextView
+                    android:id="@+id/tv_lastUpdated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/side_margin"
+                    android:textColor="@android:color/white"
+                    app:layout_constraintTop_toBottomOf="@id/tv_mcw_weatherMain"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:text="@{date}"
+                    tools:text="Last Updated: 2020.08.10."/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
