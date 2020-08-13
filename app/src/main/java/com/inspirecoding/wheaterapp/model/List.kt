@@ -14,7 +14,7 @@ data class List(
 
 
     @SerializedName("dt")
-    var dt: Int? = null,
+    var dt: Int = 0,
 
     @SerializedName("main")
     @Embedded

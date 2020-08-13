@@ -5,17 +5,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import com.inspirecoding.wheaterapp.R
-import com.inspirecoding.wheaterapp.util.Status.SUCCESS
-import com.inspirecoding.wheaterapp.util.Status.ERROR
-import com.inspirecoding.wheaterapp.util.Status.LOADING
 import com.inspirecoding.wheaterapp.databinding.AddCityFragmentBinding
+import com.inspirecoding.wheaterapp.util.combineWith
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class AddCityFragment : Fragment()
@@ -37,9 +37,12 @@ class AddCityFragment : Fragment()
     {
         super.onViewCreated(view, savedInstanceState)
 
+        setupToastObserver()
+        setupProgressBarObserver()
+
         binding.tietSearch.addTextChangedListener { _searchText ->
             _searchText?.let { __searchText ->
-                setupGetCurrentWeatherObserver(__searchText.toString())
+                viewModel.getWeather(__searchText.toString())
             }
         }
 
@@ -48,27 +51,16 @@ class AddCityFragment : Fragment()
         }
     }
 
-    private fun setupGetCurrentWeatherObserver(searchText: String)
+    private fun setupToastObserver()
     {
-        viewModel.getCurrentWeather(searchText).observe(viewLifecycleOwner) { _resource ->
-            when (_resource.status)
-            {
-                SUCCESS -> {
-                    _resource.data?.let { _foundCity ->
-                        val city = "${_foundCity.name}, ${_foundCity.sys.country}"
-                        binding.tvCity.text = city
-                    }
-                    setProgressBarVisibility(isVisible = false)
-                }
-                ERROR -> {
-                    _resource.message?.let { _message ->
-                        setProgressBarVisibility(isVisible = false)
-                    }
-                }
-                LOADING -> {
-                    setProgressBarVisibility(isVisible = true)
-                }
-            }
+        viewModel.toast.observe(viewLifecycleOwner) { _message ->
+            Toast.makeText(context, _message, Toast.LENGTH_SHORT).show()
+        }
+    }
+    private fun setupProgressBarObserver()
+    {
+        viewModel.isLoading.observe(viewLifecycleOwner) { _isVisible ->
+            setProgressBarVisibility(_isVisible)
         }
     }
 
@@ -86,12 +78,18 @@ class AddCityFragment : Fragment()
 
     private fun insertCity()
     {
-        viewModel.getCurrentWeatherTableSize().observe(viewLifecycleOwner) { _tableSize ->
-            viewModel.foundCurrentWeatherOfCity?.let {_foundCurrentWeatherOfCity ->
-                _foundCurrentWeatherOfCity.position = _tableSize
-                viewModel.insertCity(_foundCurrentWeatherOfCity).observe(viewLifecycleOwner, Observer { _result ->
-                    navigateToWeatherFragment()
-                })
+        viewModel.getCurrentWeatherTableSize().observe(viewLifecycleOwner) { currentWeatherTableSize ->
+            if(viewModel.foundCurrentWeatherOfCity != null && viewModel.foundForecastWeatherOfCity != null)
+            {
+                viewModel.foundCurrentWeatherOfCity!!.position = currentWeatherTableSize
+                viewModel.foundForecastWeatherOfCity!!.cityName = viewModel.foundCurrentWeatherOfCity!!.name
+
+                viewModel.insertWeather().observe(viewLifecycleOwner) { _result ->
+                    if(_result.first != null && _result.second != null)
+                    {
+                        navigateToWeatherFragment()
+                    }
+                }
             }
         }
     }

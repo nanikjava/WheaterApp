@@ -2,7 +2,7 @@ package com.inspirecoding.wheaterapp.di
 
 import com.google.gson.GsonBuilder
 import com.inspirecoding.wheaterapp.repository.remote.WeatherServiceAPI
-import com.inspirecoding.wheaterapp.util.Constants
+import com.inspirecoding.wheaterapp.util.Common
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,7 +20,7 @@ class RemoteDatabaseModul
     fun providesRetrofit() : Retrofit
     {
         return Retrofit.Builder()
-            .baseUrl(Constants.WEATHER_BASE_URL)
+            .baseUrl(Common.WEATHER_BASE_URL)
             .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
             .build()
     }

@@ -12,51 +12,29 @@ class ListOfWeatherConverter
     {
         @TypeConverter
         @JvmStatic
-        fun fromWeatherList(weather: List<Weather?>?): String? {
-            if (weather == null) {
+        fun toWeatherList(weatherString: String?): List<Weather>?
+        {
+            if (weatherString == null)
+            {
                 return null
             }
             val gson = Gson()
-            val type: Type =
-                object : TypeToken<List<Weather?>?>() {}.type
-            return gson.toJson(weather, type)
+
+            val type: Type = object : TypeToken<List<Weather?>?>() {}.type
+            return gson.fromJson<List<Weather>>(weatherString, type)
         }
 
         @TypeConverter
         @JvmStatic
-        fun toWeatherList(weatherString: String?): List<Weather>? {
-            if (weatherString == null) {
+        fun fromWeatherList(weather: List<Weather?>?): String?
+        {
+            if (weather == null)
+            {
                 return null
             }
             val gson = Gson()
-            val type: Type =
-                object : TypeToken<List<Weather?>?>() {}.type
-            return gson.fromJson<List<Weather>>(weatherString, type)
+            val type: Type = object : TypeToken<List<Weather?>?>() {}.type
+            return gson.toJson(weather, type)
         }
-
-
-
-
-//        var gson = Gson()
-//
-//        @TypeConverter
-//        @JvmStatic
-//        fun toWeatherList(data: String?): List<Weather>?
-//        {
-//            if (data == null)
-//            {
-//                return Collections.emptyList()
-//            }
-//
-//            val listType = object : TypeToken<List<String>>() {}.type
-//            return gson.fromJson(data, listType)
-//        }
-//
-//        @TypeConverter
-//        @JvmStatic
-//        fun someObjectListToString(someObjects: List<Weather>?): String?
-//        {
-//            return gson.toJson(someObjects)
-//        }
     }
 }

@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="viewModel"
             type="com.inspirecoding.wheaterapp.addcity.AddCityViewModel" />
@@ -72,6 +71,15 @@
                     app:layout_constraintStart_toStartOf="@id/til_search"
                     app:layout_constraintTop_toBottomOf="@id/til_search" />
 
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="invisible"
+                    app:layout_constraintEnd_toEndOf="@id/til_search"
+                    app:layout_constraintTop_toTopOf="@id/til_search"
+                    app:layout_constraintBottom_toBottomOf="@id/til_search"/>
+
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -107,20 +115,11 @@
             android:layout_marginStart="@dimen/side_margin"
             android:textColor="@android:color/black"
             android:textSize="@dimen/mcw_city_textsize"
+            android:text="@{viewModel.city}"
             app:hasCityFound="@{viewModel.hasCityFound}"
             app:layout_constraintBottom_toBottomOf="@+id/iv_location"
             app:layout_constraintStart_toEndOf="@id/iv_location"
             app:layout_constraintTop_toTopOf="@+id/iv_location"
             tools:text="Budapest" />
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/side_margin"
-            android:visibility="invisible"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/mcw_searchCity"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

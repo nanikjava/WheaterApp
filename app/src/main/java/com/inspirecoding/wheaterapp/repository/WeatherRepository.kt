@@ -11,19 +11,24 @@ interface WeatherRepository
 {
     // Remote
     suspend fun getCurrentWeather (@Url endUrl: String) : Resource<CurrentWeather>
-    suspend fun getForecastWeatherResponse (@Url endUrl: String) : Response<ForecastWeather>
+    suspend fun getForecastWeatherRemote (@Url endUrl: String) : Resource<ForecastWeather>
 
     // CurrentWeather
     suspend fun insertCurrentWeather (currentWeather : CurrentWeather) : Long
     suspend fun updateCurrentWeather (currentWeather: CurrentWeather) : Int
     suspend fun deleteCurrentWeather (currentWeather: CurrentWeather) : Int
     fun getAllCurrentWeather() : LiveData<List<CurrentWeather>>
-
-    fun getTableSize() : LiveData<Int>
+    fun getCurrentWeatherTableSize() : LiveData<Int>
 
     // ForecastWeather
-    suspend fun insertAllForecastWeather (listOfForecastWeather : List<ForecastWeather>)
+    suspend fun insertForecastWeather(forecastWeather: ForecastWeather) : Long
+    suspend fun updateForecastWeather (forecastWeather: ForecastWeather) : Int
+    suspend fun deleteForecastWeather (forecastWeather: ForecastWeather) : Int
+    fun getForecastWeatherLocal(cityName: String) : LiveData<ForecastWeather>
     fun getAllForecastWeather() : LiveData<List<ForecastWeather>>
+    fun getForecastWeatherTableSize() : LiveData<Int>
 
+    // Observer functions
     fun observeCurrentWeather(currentWeather: CurrentWeather) : LiveData<Resource<CurrentWeather>>
+    fun observeForecastWeather(forecastWeather: ForecastWeather) : LiveData<Resource<ForecastWeather>>
 }

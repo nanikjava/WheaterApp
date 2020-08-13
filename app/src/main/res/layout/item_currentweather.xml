@@ -4,15 +4,19 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="city"
             type="String" />
+
         <variable
             name="main"
             type="com.inspirecoding.wheaterapp.model.Main" />
+
         <variable
             name="date"
             type="String" />
+
         <variable
             name="weatherDesc"
             type="String" />
@@ -22,15 +26,30 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/tv_lastUpdated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/side_margin"
+            android:text="@{date}"
+            android:textColor="@android:color/darker_gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Last Updated: 2020.08.10." />
+
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/mcw_todayWeather"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/side_margin"
+            android:layout_marginLeft="@dimen/side_margin"
+            android:layout_marginRight="@dimen/side_margin"
+            android:layout_marginBottom="@dimen/side_margin"
             android:elevation="@dimen/mcw_elevation"
             app:cardBackgroundColor="@color/colorPrimary"
             app:cardCornerRadius="@dimen/mcw_radius"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/tv_lastUpdated">
+
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -39,70 +58,74 @@
                     android:id="@+id/iv_weather_icon"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
-                    tools:src="@drawable/ic_broken_clouds"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.9"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.2"
-                    app:layout_constraintHorizontal_bias="0.9"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"/>
+                    tools:src="@drawable/ic_broken_clouds" />
 
                 <TextView
                     android:id="@+id/tv_mcw_city"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/side_margin"
+                    android:text="@{city}"
                     android:textAlignment="center"
+                    android:textColor="@android:color/white"
                     android:textSize="@dimen/mcw_city_textsize"
                     android:textStyle="bold"
-                    android:layout_margin="@dimen/side_margin"
-                    android:textColor="@android:color/white"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:text="@{city}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
                     tools:text="Budapest" />
 
                 <TextView
                     android:id="@+id/tv_mcw_temperature"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/side_margin"
+                    android:text="@{@string/temperature_with_degree(main.temp)}"
                     android:textAlignment="center"
+                    android:textColor="@android:color/black"
                     android:textSize="@dimen/mcw_temp_textsize"
                     android:textStyle="bold"
-                    android:layout_margin="@dimen/side_margin"
-                    android:textColor="@android:color/black"
-                    app:layout_constraintTop_toBottomOf="@id/tv_mcw_city"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:text="@{@string/temperature_with_degree(main.temp)}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_mcw_city"
                     tools:text="26°" />
 
                 <TextView
                     android:id="@+id/tv_mcw_weatherMain"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/side_margin"
+                    android:text="@{weatherDesc}"
                     android:textAlignment="center"
+                    android:textColor="@android:color/white"
                     android:textSize="@dimen/mcw_weather_main_textsize"
                     android:textStyle="bold"
-                    android:layout_margin="@dimen/side_margin"
-                    android:textColor="@android:color/white"
-                    app:layout_constraintTop_toBottomOf="@id/tv_mcw_temperature"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:text="@{weatherDesc}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv_mcw_temperature"
                     tools:text="Clouds" />
 
-                <TextView
-                    android:id="@+id/tv_lastUpdated"
-                    android:layout_width="wrap_content"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_threehoursForecast"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/side_margin"
-                    android:textColor="@android:color/white"
+                    android:layout_marginTop="@dimen/large_margin"
+                    android:layout_marginStart="@dimen/side_margin"
+                    android:layout_marginEnd="@dimen/side_margin"
+                    android:layout_marginBottom="@dimen/side_margin"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/tv_mcw_weatherMain"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    android:text="@{date}"
-                    tools:text="Last Updated: 2020.08.10."/>
+                    app:layout_constraintStart_toStartOf="parent"
+                    tools:listitem="@layout/item_threehours_forecast" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>

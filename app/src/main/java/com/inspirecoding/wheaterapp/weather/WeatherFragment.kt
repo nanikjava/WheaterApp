@@ -13,8 +13,8 @@ import com.inspirecoding.wheaterapp.R
 import com.inspirecoding.wheaterapp.weather.adapter.CurrentWeatherAdapter
 import com.inspirecoding.wheaterapp.databinding.WeatherFragmentBinding
 import com.inspirecoding.wheaterapp.model.CurrentWeather
+import com.inspirecoding.wheaterapp.model.ForecastWeather
 import com.inspirecoding.wheaterapp.util.Status
-import com.inspirecoding.wheaterapp.util.observeOnce
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -58,13 +58,17 @@ class WeatherFragment : Fragment()
             {
                 if(!::currentWeatherAdapter.isInitialized)
                 {
-                    for (selectedCity in _listOfCities)
-                    {
-                        getCurrentWeatherObserver(selectedCity)
+                }
+                val citiesList = emptyList<Pair<CurrentWeather, ForecastWeather>>()
+                for (currentWeather in _listOfCities)
+                {
+//                    getCurrentWeatherObserver(currentWeather)
+                    weatherViewModel.getForecastWeatherLocal(currentWeather.name).observe(viewLifecycleOwner) {forecastWeather ->
+                        currentWeatherAdapter.addNewCurrentWeather(Pair(currentWeather, forecastWeather))
                     }
                 }
 
-                initViewPager(_listOfCities.toMutableList())
+                initViewPager(citiesList.toMutableList())
             }
         })
     }
@@ -86,18 +90,18 @@ class WeatherFragment : Fragment()
                         _currentWeather.position = currentWeather.position
                         if(this::currentWeatherAdapter.isInitialized)
                         {
-                            val addedCurrentWeather = currentWeatherAdapter.listOfCurrentWeather.find {
-                                it.name == _currentWeather.name
-                            }
-                            Timber.d("$addedCurrentWeather")
-                            if(addedCurrentWeather != null)
-                            {
-                                currentWeatherAdapter.updateNewCurrentWeather(_currentWeather)
-                            }
-                            else
-                            {
-                                currentWeatherAdapter.addNewCurrentWeather(_currentWeather)
-                            }
+//                            val addedCurrentWeather = currentWeatherAdapter.listOfCurrentWeather.find {
+//                                it.name == _currentWeather.name
+//                            }
+//                            Timber.d("$addedCurrentWeather")
+//                            if(addedCurrentWeather != null)
+//                            {
+//                                currentWeatherAdapter.updateNewCurrentWeather(_currentWeather)
+//                            }
+//                            else
+//                            {
+//                                currentWeatherAdapter.addNewCurrentWeather(_currentWeather)
+//                            }
                         }
                     }
                 }
@@ -110,8 +114,27 @@ class WeatherFragment : Fragment()
             }
         })
     }
+    private fun getForecastWeatherObserver(forecastWeather: ForecastWeather)
+    {
+        weatherViewModel.getForecastWeather(forecastWeather).observe(viewLifecycleOwner, Observer { _result ->
+            when (_result.status)
+            {
+                Status.SUCCESS -> {
+                    _result.data?.let { _forecastWeather ->
+                        Timber.d("$_forecastWeather")
+                    }
+                }
+                Status.LOADING -> {
+                    Timber.d("LOADING")
+                }
+                Status.ERROR -> {
+                    Timber.d("${_result.message}")
+                }
+            }
+        })
+    }
 
-    private fun initViewPager(listOfCities: MutableList<CurrentWeather>)
+    private fun initViewPager(listOfCities: MutableList<Pair<CurrentWeather, ForecastWeather>>)
     {
         currentWeatherAdapter = CurrentWeatherAdapter(listOfCities)
         binding.viewPager2.apply {

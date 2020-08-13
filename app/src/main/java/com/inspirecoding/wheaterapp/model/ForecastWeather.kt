@@ -12,6 +12,9 @@ data class ForecastWeather (
     var forecastWeatherId: Int = 0,
 
 
+    @ColumnInfo(name = "cityName")
+    var cityName: String? = null,
+
     @SerializedName("cod")
     @ColumnInfo(name = "cod")
     var cod: String? = null,

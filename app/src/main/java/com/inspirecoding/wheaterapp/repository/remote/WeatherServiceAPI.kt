@@ -13,7 +13,7 @@ interface WeatherServiceAPI
         @Url endUrl: String
     ) : Response<CurrentWeather>
     @GET
-    suspend fun getForecastWeatherResponse (
+    suspend fun getForecastWeather (
         @Url endUrl: String
     ) : Response<ForecastWeather>
 }

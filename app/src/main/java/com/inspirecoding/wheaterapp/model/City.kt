@@ -14,7 +14,7 @@ data class City(
 
 
     @SerializedName("name")
-    var name: String? = null,
+    var name: String = "",
 
     @SerializedName("coord")
     @Embedded
