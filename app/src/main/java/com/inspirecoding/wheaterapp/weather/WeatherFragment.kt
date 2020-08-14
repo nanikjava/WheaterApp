@@ -58,18 +58,13 @@ class WeatherFragment : Fragment()
             {
                 if(!::currentWeatherAdapter.isInitialized)
                 {
-                }
-                val citiesList = emptyList<Pair<CurrentWeather, ForecastWeather>>()
-                for (currentWeather in _listOfCities)
-                {
-//                    getWeatherObserver(currentWeather)
-                    getCurrentWeatherObserver(currentWeather)
-//                    weatherViewModel.getForecastWeatherLocal(currentWeather.name).observe(viewLifecycleOwner) {forecastWeather ->
-//                        currentWeatherAdapter.addNewCurrentWeather(Pair(currentWeather, forecastWeather))
-//                    }
+                    for (selectedCity in _listOfCities)
+                    {
+                        getCurrentWeatherObserver(selectedCity)
+                    }
                 }
 
-                initViewPager(citiesList.toMutableList())
+                initViewPager(_listOfCities.toMutableList())
             }
         })
     }
@@ -79,48 +74,6 @@ class WeatherFragment : Fragment()
         super.onActivityCreated(savedInstanceState)
 
         setHasOptionsMenu(true)
-    }
-
-    private fun getWeatherObserver(currentWeather: CurrentWeather)
-    {
-        weatherViewModel.getWeatherObservable(currentWeather).observe(viewLifecycleOwner) { _result ->
-            when
-            {
-                _result.first?.status == Status.SUCCESS && _result.second?.status == Status.SUCCESS -> {
-                    if (_result.first != null && _result.second != null)
-                    {
-                        if(_result.first!!.data != null && _result.second!!.data != null)
-                        {
-                            val pair = Pair(_result.first!!.data!!, _result.second!!.data!!)
-                            pair.first.position = currentWeather.position
-                            if(this::currentWeatherAdapter.isInitialized)
-                            {
-                                val addedCurrentWeather = currentWeatherAdapter.listOfCurrentWeather.find {
-                                    it.first.name == pair.first.name
-                                }
-
-                                Timber.d("$addedCurrentWeather")
-
-                                if(addedCurrentWeather != null)
-                                {
-                                    currentWeatherAdapter.updateNewCurrentWeather(pair)
-                                }
-                                else
-                                {
-                                    currentWeatherAdapter.addNewCurrentWeather(pair)
-                                }
-                            }
-                        }
-                    }
-                }
-                _result.first?.status == Status.LOADING || _result.second?.status == Status.LOADING -> {
-                    Timber.d("LOADING")
-                }
-                _result.first?.status == Status.LOADING || _result.second?.status == Status.LOADING -> {
-                    Timber.d("CurrentWeather: ${_result.first?.message}, ForecastWeather: ${_result.second?.message}")
-                }
-            }
-        }
     }
 
     private fun getCurrentWeatherObserver(currentWeather: CurrentWeather)
@@ -133,7 +86,18 @@ class WeatherFragment : Fragment()
                         _currentWeather.position = currentWeather.position
                         if(this::currentWeatherAdapter.isInitialized)
                         {
-                            getForecastWeatherObserver(_currentWeather)
+                            val addedCurrentWeather = currentWeatherAdapter.listOfCurrentWeather.find {
+                                it.name == _currentWeather.name
+                            }
+                            Timber.d("$addedCurrentWeather")
+                            if(addedCurrentWeather != null)
+                            {
+                                currentWeatherAdapter.updateNewCurrentWeather(_currentWeather)
+                            }
+                            else
+                            {
+                                currentWeatherAdapter.addNewCurrentWeather(_currentWeather)
+                            }
                         }
                     }
                 }
@@ -183,7 +147,8 @@ class WeatherFragment : Fragment()
         })
     }
 
-    private fun initViewPager(listOfCities: MutableList<Pair<CurrentWeather, ForecastWeather>>)
+
+    private fun initViewPager(listOfCities: MutableList<CurrentWeather>)
     {
         currentWeatherAdapter = CurrentWeatherAdapter(listOfCities)
         binding.viewPager2.apply {

@@ -12,26 +12,26 @@ import com.inspirecoding.wheaterapp.util.Common
 import com.inspirecoding.wheaterapp.util.DateConverters
 
 class CurrentWeatherAdapter (
-    val listOfCurrentWeather: MutableList<Pair<CurrentWeather, ForecastWeather>>
+    val listOfCurrentWeather: MutableList<CurrentWeather>
 ) : RecyclerView.Adapter<CurrentWeatherAdapter.CurrentWeatherViewHolder>()
 {
-    fun addNewCurrentWeather(weather: Pair<CurrentWeather, ForecastWeather>)
+    fun addNewCurrentWeather(currentWeather: CurrentWeather)
     {
-        listOfCurrentWeather.add(weather)
+        listOfCurrentWeather.add(currentWeather)
         notifyItemChanged(0)
     }
-    fun updateNewCurrentWeather(weather: Pair<CurrentWeather, ForecastWeather>)
+    fun updateNewCurrentWeather(currentWeather: CurrentWeather)
     {
         val index = listOfCurrentWeather.indexOfFirst {
-            it.first.name == weather.first.name
+            it.name == currentWeather.name
         }
-        listOfCurrentWeather[index] = weather
+        listOfCurrentWeather[index] = currentWeather
         notifyItemChanged(index)
     }
-    fun updateAllItems(weather: MutableList<Pair<CurrentWeather, ForecastWeather>>)
+    fun updateAllItems(newList: MutableList<CurrentWeather>)
     {
         listOfCurrentWeather.clear()
-        listOfCurrentWeather.addAll(weather)
+        listOfCurrentWeather.addAll(newList)
         notifyDataSetChanged()
     }
 
@@ -54,28 +54,29 @@ class CurrentWeatherAdapter (
         currentWeatherViewHolder.bind(listOfCurrentWeather[position])
     }
 
+
     inner class CurrentWeatherViewHolder constructor(val binding: ItemCurrentweatherBinding) : RecyclerView.ViewHolder(binding.root)
     {
-        fun bind (weather: Pair<CurrentWeather, ForecastWeather>)
+        fun bind (currentWeather: CurrentWeather)
         {
-            binding.city = weather.first.name
-            binding.main = weather.first.main
+            binding.city = currentWeather.name
+            binding.main = currentWeather.main
 
-            weather.first.dt?.let { _dateTime ->
+            currentWeather.dt?.let { _dateTime ->
                 binding.date = DateConverters.getFormattedTimeAgo(binding.root.context, _dateTime * 1000)
             }
 
             val weatherDesc = Common.getWeatherDescription(
-                weather.first.weather?.get(0)?.description, binding.root.context
+                currentWeather.weather?.get(0)?.description, binding.root.context
             )
             binding.weatherDesc = weatherDesc.first
             binding.ivWeatherIcon.setImageResource(weatherDesc.second)
 
-            binding.rvThreehoursForecast.apply {
-                weather.second.list?.let { _list ->
-                    adapter = ThreeHoursForecastAdapter(_list)
-                }
-            }
+//            binding.rvThreehoursForecast.apply {
+//                currentWeather.second.list?.let { _list ->
+//                    adapter = ThreeHoursForecastAdapter(_list)
+//                }
+//            }
         }
     }
 }
