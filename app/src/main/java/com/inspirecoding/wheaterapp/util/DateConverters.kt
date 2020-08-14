@@ -34,16 +34,43 @@ object DateConverters
         }
     }
 
-    fun getDateForThreeHoursForecast(timeStamp: Long) : String
+    fun getDateForThreeHoursForecast(timeStamp: Long, context: Context) : String
     {
-        val currentTimeInMillis: Long = System.currentTimeMillis()
-        val futureDate = Calendar.getInstance().apply {
-            timeInMillis = timeStamp
+        val today = datestampToCalendar(System.currentTimeMillis())
+        val dayOfToday = today.get(Calendar.DAY_OF_MONTH)
+
+        val futureDate = datestampToCalendar(timeStamp*1000)
+        val dayOfFutureDay = futureDate.get(Calendar.DAY_OF_MONTH)
+
+        val difference = dayOfFutureDay-dayOfToday
+
+        return when(difference)
+        {
+            0 ->  getTodayAndDateString(futureDate.time, context)
+            1 ->  getTomorrowAndDateString(futureDate.time, context)
+            else -> getOtherDaysDateString(futureDate, context)
         }
+    }
 
 
-        val today = Calendar.getInstance().today()
 
-        return datestampToCalendar(timeStamp).time.toLocaleString()
+    private fun getTodayAndDateString(date: Date, context: Context) : String
+    {
+        return context.getString(R.string.today___, date.toLocaleString().substringAfterLast(" ").substringBeforeLast(":"))
+    }
+    private fun getTomorrowAndDateString(date: Date, context: Context): String
+    {
+        return context.getString(R.string.tomorrow___, date.toLocaleString().substringAfterLast(" ").substringBeforeLast(":"))
+    }
+    private fun getOtherDaysDateString(calendar: Calendar, context: Context): String
+    {
+        val res = context.resources
+        val daysOfWeek = res.getStringArray(R.array.days_of_week)
+
+        val intOfDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1
+        val stringOfDayOfWeek = daysOfWeek[intOfDayOfWeek]
+
+        return "$stringOfDayOfWeek\n" +
+                "${calendar.time.toLocaleString().substringAfterLast(" ").substringBeforeLast(":")}"
     }
 }

@@ -30,5 +30,5 @@ interface WeatherRepository
 
     // Observer functions
     fun observeCurrentWeather(currentWeather: CurrentWeather) : LiveData<Resource<CurrentWeather>>
-    fun observeForecastWeather(forecastWeather: ForecastWeather) : LiveData<Resource<ForecastWeather>>
+    fun observeForecastWeather(cityName: String) : LiveData<Resource<ForecastWeather>>
 }

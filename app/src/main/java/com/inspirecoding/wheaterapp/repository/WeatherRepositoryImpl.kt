@@ -67,15 +67,15 @@ class WeatherRepositoryImpl @Inject constructor (
             }
         }
     )
-    override fun observeForecastWeather(forecastWeather: ForecastWeather)= resultLiveData(
+    override fun observeForecastWeather(cityName: String)= resultLiveData(
         // Get list of articles from Room
         databaseQuery = {
-            forecastWeatherDao.getForecastWeather(forecastWeather.city.name)
+            forecastWeatherDao.getForecastWeather(cityName)
         },
         // Refresh the list of articles from network
         networkCall = {
             getResult {
-                val weatherUrl = Common.createEndUrl_currentWeather(forecastWeather.city.name, "metric")
+                val weatherUrl = Common.createEndUrl_currentWeather(cityName, "metric")
                 weatherServiceAPI.getForecastWeather(weatherUrl)
             }
         },

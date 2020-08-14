@@ -35,7 +35,7 @@ class ThreeHoursForecastAdapter (
     {
         fun bind (list: List)
         {
-            binding.tvDate.text = DateConverters.getDateForThreeHoursForecast(list.dt.toLong())
+            binding.tvDate.text = DateConverters.getDateForThreeHoursForecast(list.dt.toLong(), binding.root.context)
         }
     }
 }

@@ -90,6 +90,37 @@
     <string name="updated_on">Updated on %.0f</string>
 
 
-    <string name="today...">Today\n%.0f</string>
-    <string name="tomorrow...">Tomorrow\n%.0f</string>
+    <string name="today...">Today\n%1$s</string>
+    <string name="tomorrow...">Tomorrow\n%1$s</string>
+
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunday">Sunday</string>
+
+    <string-array name="days_of_week">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+    </string-array>
+
+
+
+
+
+
+
+
+
+
+
+
+
 </resources>
