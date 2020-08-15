@@ -3,17 +3,13 @@ package com.inspirecoding.wheaterapp.model
 import androidx.room.*
 import com.google.gson.annotations.SerializedName
 import com.inspirecoding.wheaterapp.util.ListOfListConverter
-import com.inspirecoding.wheaterapp.util.ListOfWeatherConverter
 
 @Entity(tableName = "ForecastWeather")
 data class ForecastWeather (
 
-    @PrimaryKey(autoGenerate = true)
-    var forecastWeatherId: Int = 0,
-
-
+    @PrimaryKey
     @ColumnInfo(name = "cityName")
-    var cityName: String? = null,
+    var cityName: String = "",
 
     @SerializedName("cod")
     @ColumnInfo(name = "cod")

@@ -4,7 +4,6 @@ import androidx.annotation.NonNull
 import androidx.room.*
 import com.google.gson.annotations.SerializedName
 import com.inspirecoding.wheaterapp.util.ListOfWeatherConverter
-import java.math.BigInteger
 import kotlin.collections.List
 
 @Entity(tableName = "CurrentWeather")

@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.inspirecoding.wheaterapp.R
 import com.inspirecoding.wheaterapp.databinding.ItemThreehoursForecastBinding
 import com.inspirecoding.wheaterapp.model.List
+import com.inspirecoding.wheaterapp.util.Common
 import com.inspirecoding.wheaterapp.util.DateConverters
 
 class ThreeHoursForecastAdapter (
@@ -36,6 +37,13 @@ class ThreeHoursForecastAdapter (
         fun bind (list: List)
         {
             binding.tvDate.text = DateConverters.getDateForThreeHoursForecast(list.dt.toLong(), binding.root.context)
+
+            val weatherDesc = Common.getWeatherDescription(
+                list.weather?.get(0)?.description, binding.root.context
+            )
+            binding.ivWeatherIcon.setImageResource(weatherDesc.second)
+
+            binding.main = list.main
         }
     }
 }

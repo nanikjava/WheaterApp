@@ -13,6 +13,7 @@ class WeatherViewModel @ViewModelInject constructor (
 ) : ViewModel()
 {
     fun listOfCurrentWeather() = weatherRepository.getAllCurrentWeather()
+    fun listOfForecastWeather() = weatherRepository.getAllForecastWeather()
 
     fun getWeatherObservable(currentWeather: CurrentWeather) : LiveData<Pair<Resource<CurrentWeather>?, Resource<ForecastWeather>?>>
     {
@@ -23,7 +24,9 @@ class WeatherViewModel @ViewModelInject constructor (
     }
 
     fun getCurrentWeather(currentWeather: CurrentWeather) = weatherRepository.observeCurrentWeather(currentWeather)
+    fun observeWeather(currentWeather: CurrentWeather) = weatherRepository.observeWeather(currentWeather)
     fun getForecastWeather(cityName: String) = weatherRepository.observeForecastWeather(cityName)
+
 
     fun getForecastWeatherLocal(cityName: String) = weatherRepository.getForecastWeatherLocal(cityName)
 }

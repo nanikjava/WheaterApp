@@ -9,7 +9,11 @@ import com.inspirecoding.wheaterapp.repository.local.ForecastWeatherDao
 import com.inspirecoding.wheaterapp.repository.remote.BaseDataSource
 import com.inspirecoding.wheaterapp.repository.remote.WeatherServiceAPI
 import com.inspirecoding.wheaterapp.util.Common
+import com.inspirecoding.wheaterapp.util.combineWith
+import kotlinx.coroutines.*
+import retrofit2.Response
 import javax.inject.Inject
+import kotlin.system.measureTimeMillis
 
 class WeatherRepositoryImpl @Inject constructor (
     private val weatherServiceAPI: WeatherServiceAPI,
@@ -82,8 +86,48 @@ class WeatherRepositoryImpl @Inject constructor (
         // If the network call was successful then update the list in Room
         saveCallResult = {
             it.let { _forecastWeather ->
+                _forecastWeather.cityName = cityName
                 forecastWeatherDao.insertForecastWeather(_forecastWeather)
             }
         }
     )
+    override fun observeWeather(currentWeather: CurrentWeather)= resultLiveData(
+        // Get list of articles from Room
+        databaseQuery = {
+            getWeather(currentWeather.name)
+        },
+        // Refresh the list of articles from network
+        networkCall = {
+            getResult {
+                runBlocking {
+                    val currentWeatherEndUrl = Common.createEndUrl_currentWeather(currentWeather.name, "metric")
+                    val forecastWeatherEndUrl = Common.createEndUrl_forecastWeather(currentWeather.name, "metric")
+                    val currentWeatherResponse = async { weatherServiceAPI.getCurrentWeather(currentWeatherEndUrl) }
+                    val forecastWeatherResponse = async { weatherServiceAPI.getForecastWeather(forecastWeatherEndUrl) }
+                    Response.success(Pair(currentWeatherResponse.await().body(), forecastWeatherResponse.await().body()))
+                }
+            }
+        },
+        // If the network call was successful then update the list in Room
+        saveCallResult = {
+//            it.let { result ->
+//                val _currentWeather = result.first
+//                val _forecastWeather = result.second
+//                _currentWeather?.let {
+//                    _currentWeather.position = currentWeather.position
+//                    currentWeatherDao.insertCurrentWeather(_currentWeather)
+//                }
+//                _forecastWeather?.let {
+//                    _forecastWeather.cityName = currentWeather.name
+//                    forecastWeatherDao.insertForecastWeather(_forecastWeather)
+//                }
+//            }
+        }
+    )
+    fun getWeather(cityName: String) : LiveData<Pair<CurrentWeather?, ForecastWeather?>>
+    {
+        return currentWeatherDao.getCurrentWeather(cityName).combineWith(forecastWeatherDao.getForecastWeather(cityName)) {  resultCurrentWeather, resultForecastWeather ->
+            Pair(resultCurrentWeather, resultForecastWeather)
+        }
+    }
 }
