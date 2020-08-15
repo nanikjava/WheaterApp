@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.inspirecoding.wheaterapp.R
 import com.inspirecoding.wheaterapp.databinding.AddCityFragmentBinding
 import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
 
 @AndroidEntryPoint
 class AddCityFragment : Fragment()
@@ -78,6 +79,7 @@ class AddCityFragment : Fragment()
         viewModel.getCurrentWeatherTableSize().observe(viewLifecycleOwner) { currentWeatherTableSize ->
             if(viewModel.foundCurrentWeatherOfCity != null && viewModel.foundForecastWeatherOfCity != null)
             {
+                Timber.d("$currentWeatherTableSize")
                 viewModel.foundCurrentWeatherOfCity!!.position = currentWeatherTableSize
                 viewModel.foundForecastWeatherOfCity!!.cityName = viewModel.foundCurrentWeatherOfCity!!.name
 

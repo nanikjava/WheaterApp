@@ -17,19 +17,17 @@ interface WeatherRepository
     suspend fun insertCurrentWeather (currentWeather : CurrentWeather) : Long
     suspend fun updateCurrentWeather (currentWeather: CurrentWeather) : Int
     suspend fun deleteCurrentWeather (currentWeather: CurrentWeather) : Int
-    fun getAllCurrentWeather() : LiveData<List<CurrentWeather>>
-    fun getCurrentWeatherTableSize() : LiveData<Int>
+    suspend fun getAllCurrentWeather() : List<CurrentWeather>
+    suspend fun getCurrentWeatherTableSize() : Int
 
     // ForecastWeather
     suspend fun insertForecastWeather(forecastWeather: ForecastWeather) : Long
     suspend fun updateForecastWeather (forecastWeather: ForecastWeather) : Int
     suspend fun deleteForecastWeather (forecastWeather: ForecastWeather) : Int
     fun getForecastWeatherLocal(cityName: String) : LiveData<ForecastWeather>
-    fun getAllForecastWeather() : LiveData<List<ForecastWeather>>
+    suspend fun getAllForecastWeather() : List<ForecastWeather>
     fun getForecastWeatherTableSize() : LiveData<Int>
 
     // Observer functions
-    fun observeCurrentWeather(currentWeather: CurrentWeather) : LiveData<Resource<CurrentWeather>>
-    fun observeForecastWeather(cityName: String) : LiveData<Resource<ForecastWeather>>
     fun observeWeather(currentWeather: CurrentWeather) : LiveData<Resource<Pair<CurrentWeather?, ForecastWeather?>>>
 }

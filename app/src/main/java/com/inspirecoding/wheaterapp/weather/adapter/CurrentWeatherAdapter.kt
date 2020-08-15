@@ -33,7 +33,9 @@ class CurrentWeatherAdapter (
         val index = listOfCurrentWeather.indexOfFirst {
             it.first.name == weather.first.name
         }
+
         listOfCurrentWeather[index] = weather
+
         notifyItemChanged(index)
     }
     fun updateAllItems(weather: MutableList<Pair<CurrentWeather, ForecastWeather>>)

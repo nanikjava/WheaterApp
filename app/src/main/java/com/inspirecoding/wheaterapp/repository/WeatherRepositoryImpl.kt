@@ -1,6 +1,7 @@
 package com.inspirecoding.wheaterapp.repository
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.distinctUntilChanged
 import com.inspirecoding.wheaterapp.model.CurrentWeather
 import com.inspirecoding.wheaterapp.model.ForecastWeather
 import com.inspirecoding.wheaterapp.model.Resource
@@ -12,6 +13,7 @@ import com.inspirecoding.wheaterapp.util.Common
 import com.inspirecoding.wheaterapp.util.combineWith
 import kotlinx.coroutines.*
 import retrofit2.Response
+import timber.log.Timber
 import javax.inject.Inject
 import kotlin.system.measureTimeMillis
 
@@ -39,58 +41,18 @@ class WeatherRepositoryImpl @Inject constructor (
     override suspend fun insertCurrentWeather(currentWeather: CurrentWeather) = currentWeatherDao.insertCurrentWeather(currentWeather)
     override suspend fun updateCurrentWeather(currentWeather: CurrentWeather) = currentWeatherDao.updateCurrentWeather(currentWeather)
     override suspend fun deleteCurrentWeather (currentWeather: CurrentWeather) = currentWeatherDao.deleteCurrentWeather(currentWeather)
-    override fun getAllCurrentWeather(): LiveData<List<CurrentWeather>> = currentWeatherDao.getAllCurrentWeather()
-    override fun getCurrentWeatherTableSize() = currentWeatherDao.getTableSize()
+    override suspend fun getAllCurrentWeather() = currentWeatherDao.getAllCurrentWeather()
+    override suspend fun getCurrentWeatherTableSize() = currentWeatherDao.getTableSize()
 
     // ForecastWeather
     override suspend fun insertForecastWeather(forecastWeather: ForecastWeather) = forecastWeatherDao.insertForecastWeather(forecastWeather)
     override suspend fun updateForecastWeather(forecastWeather: ForecastWeather) = forecastWeatherDao.updateForecastWeather(forecastWeather)
     override suspend fun deleteForecastWeather(forecastWeather: ForecastWeather) = forecastWeatherDao.deleteForecastWeather(forecastWeather)
     override fun getForecastWeatherLocal(cityName: String) = forecastWeatherDao.getForecastWeather(cityName)
-    override fun getAllForecastWeather(): LiveData<List<ForecastWeather>> = forecastWeatherDao.getAllForecastWeather()
+    override suspend fun getAllForecastWeather(): List<ForecastWeather> = forecastWeatherDao.getAllForecastWeather()
     override fun getForecastWeatherTableSize() = forecastWeatherDao.getTableSize()
 
-    // Observer functions
-    override fun observeCurrentWeather(currentWeather: CurrentWeather) = resultLiveData(
-        // Get list of articles from Room
-        databaseQuery = {
-            currentWeatherDao.getCurrentWeather(currentWeather.name)
-        },
-        // Refresh the list of articles from network
-        networkCall = {
-            getResult {
-                val weatherUrl = Common.createEndUrl_currentWeather(currentWeather.name, "metric")
-                weatherServiceAPI.getCurrentWeather(weatherUrl)
-            }
-        },
-        // If the network call was successful then update the list in Room
-        saveCallResult = {
-            it.let { _currentWeather ->
-                _currentWeather.position = currentWeather.position
-                currentWeatherDao.insertCurrentWeather(_currentWeather)
-            }
-        }
-    )
-    override fun observeForecastWeather(cityName: String)= resultLiveData(
-        // Get list of articles from Room
-        databaseQuery = {
-            forecastWeatherDao.getForecastWeather(cityName)
-        },
-        // Refresh the list of articles from network
-        networkCall = {
-            getResult {
-                val weatherUrl = Common.createEndUrl_currentWeather(cityName, "metric")
-                weatherServiceAPI.getForecastWeather(weatherUrl)
-            }
-        },
-        // If the network call was successful then update the list in Room
-        saveCallResult = {
-            it.let { _forecastWeather ->
-                _forecastWeather.cityName = cityName
-                forecastWeatherDao.insertForecastWeather(_forecastWeather)
-            }
-        }
-    )
+
     override fun observeWeather(currentWeather: CurrentWeather)= resultLiveData(
         // Get list of articles from Room
         databaseQuery = {
@@ -110,20 +72,21 @@ class WeatherRepositoryImpl @Inject constructor (
         },
         // If the network call was successful then update the list in Room
         saveCallResult = {
-//            it.let { result ->
-//                val _currentWeather = result.first
-//                val _forecastWeather = result.second
-//                _currentWeather?.let {
-//                    _currentWeather.position = currentWeather.position
-//                    currentWeatherDao.insertCurrentWeather(_currentWeather)
-//                }
-//                _forecastWeather?.let {
-//                    _forecastWeather.cityName = currentWeather.name
-//                    forecastWeatherDao.insertForecastWeather(_forecastWeather)
-//                }
-//            }
+            it.let { result ->
+                val _currentWeather = result.first
+                val _forecastWeather = result.second
+                _currentWeather?.let {
+                    _currentWeather.position = currentWeather.position
+                    currentWeatherDao.insertCurrentWeather(_currentWeather)
+                }
+                _forecastWeather?.let {
+                    _forecastWeather.cityName = currentWeather.name
+                    Timber.d("${_forecastWeather.cityName}")
+                    forecastWeatherDao.insertForecastWeather(_forecastWeather)
+                }
+            }
         }
-    )
+    ).distinctUntilChanged()
     fun getWeather(cityName: String) : LiveData<Pair<CurrentWeather?, ForecastWeather?>>
     {
         return currentWeatherDao.getCurrentWeather(cityName).combineWith(forecastWeatherDao.getForecastWeather(cityName)) {  resultCurrentWeather, resultForecastWeather ->

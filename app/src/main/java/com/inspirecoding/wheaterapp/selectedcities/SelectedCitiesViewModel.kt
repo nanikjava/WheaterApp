@@ -1,10 +1,7 @@
 package com.inspirecoding.wheaterapp.selectedcities
 
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.map
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.inspirecoding.wheaterapp.model.CurrentWeather
 import com.inspirecoding.wheaterapp.repository.WeatherRepository
 import kotlinx.coroutines.launch
@@ -13,7 +10,18 @@ class SelectedCitiesViewModel @ViewModelInject constructor (
     private val weatherRepository: WeatherRepository
 ) : ViewModel()
 {
-    val allSelectedCities = weatherRepository.getAllCurrentWeather()
+//    val allSelectedCities = weatherRepository.getAllCurrentWeather()
+
+    fun allSelectedCities() :LiveData<List<CurrentWeather>>
+    {
+        val size = MutableLiveData<List<CurrentWeather>>()
+        viewModelScope.launch {
+            size.value = weatherRepository.getAllCurrentWeather()
+        }
+        return size
+    }
+
+
     var listOfSelectedCities = mutableListOf<CurrentWeather>()
 
     fun updateCurrentWeather (currentWeather: CurrentWeather)

@@ -9,7 +9,7 @@ import com.inspirecoding.wheaterapp.model.ForecastWeather
 interface ForecastWeatherDao
 {
     @Query("SELECT * FROM ForecastWeather")
-    fun getAllForecastWeather() : LiveData<List<ForecastWeather>>
+    suspend fun getAllForecastWeather() : List<ForecastWeather>
     @Query ("SELECT * FROM ForecastWeather WHERE cityName = :cityName")
     fun getForecastWeather(cityName: String) : LiveData<ForecastWeather>
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -15,15 +15,14 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/icon_margin"
-        android:background="@color/colorPrimary" >
+        android:layout_marginStart="@dimen/icon_margin" >
 
         <TextView
             android:id="@+id/tv_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:textColor="@android:color/white"
+            android:textColor="@android:color/black"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -46,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:textColor="@android:color/white"
+            android:textColor="@android:color/black"
             android:text="@{@string/temperature_with_degree(main.temp)}"
             app:layout_constraintTop_toBottomOf="@id/iv_weather_icon"
             app:layout_constraintStart_toStartOf="parent"

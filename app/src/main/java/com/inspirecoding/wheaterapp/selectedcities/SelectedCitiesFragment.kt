@@ -113,7 +113,7 @@ class SelectedCitiesFragment : Fragment()
 
     private fun setupListOfSelectedCitiesObserver()
     {
-        viewModel.allSelectedCities.observe(viewLifecycleOwner, Observer {  _listOfCities ->
+        viewModel.allSelectedCities().observe(viewLifecycleOwner, Observer {  _listOfCities ->
             if (_listOfCities.size == 0)
             {
                 navigateToAddCityFragment()

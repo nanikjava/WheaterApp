@@ -90,7 +90,14 @@ class AddCityViewModel @ViewModelInject constructor (
             }
     }
 
-    fun getCurrentWeatherTableSize() = weatherRepository.getCurrentWeatherTableSize()
+    fun getCurrentWeatherTableSize() : LiveData<Int>
+    {
+        val size = MutableLiveData<Int>()
+        viewModelScope.launch {
+            size.value = weatherRepository.getCurrentWeatherTableSize()
+        }
+        return size
+    }
     fun insertCurrentWeather(currentWeather : CurrentWeather) = liveData(Dispatchers.IO) {
             emit(weatherRepository.insertCurrentWeather(currentWeather))
     }

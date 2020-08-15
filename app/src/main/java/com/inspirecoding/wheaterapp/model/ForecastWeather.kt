@@ -11,6 +11,9 @@ data class ForecastWeather (
     @ColumnInfo(name = "cityName")
     var cityName: String = "",
 
+    @ColumnInfo(name = "fetched")
+    var fetched: Long = System.currentTimeMillis(),
+
     @SerializedName("cod")
     @ColumnInfo(name = "cod")
     var cod: String? = null,

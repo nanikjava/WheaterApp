@@ -2,6 +2,7 @@ package com.inspirecoding.wheaterapp.util
 
 import android.content.Context
 import com.inspirecoding.wheaterapp.R
+import timber.log.Timber
 import java.util.*
 
 object DateConverters
@@ -66,8 +67,7 @@ object DateConverters
     {
         val res = context.resources
         val daysOfWeek = res.getStringArray(R.array.days_of_week)
-
-        val intOfDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1
+        val intOfDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 2
         val stringOfDayOfWeek = daysOfWeek[intOfDayOfWeek]
 
         return "$stringOfDayOfWeek\n" +

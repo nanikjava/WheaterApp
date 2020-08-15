@@ -7,26 +7,45 @@ import com.inspirecoding.wheaterapp.model.ForecastWeather
 import com.inspirecoding.wheaterapp.model.Resource
 import com.inspirecoding.wheaterapp.repository.WeatherRepository
 import com.inspirecoding.wheaterapp.util.combineWith
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
+import retrofit2.Response
 
 class WeatherViewModel @ViewModelInject constructor (
     private val weatherRepository: WeatherRepository
 ) : ViewModel()
 {
-    fun listOfCurrentWeather() = weatherRepository.getAllCurrentWeather()
-    fun listOfForecastWeather() = weatherRepository.getAllForecastWeather()
-
-    fun getWeatherObservable(currentWeather: CurrentWeather) : LiveData<Pair<Resource<CurrentWeather>?, Resource<ForecastWeather>?>>
+    fun listOfWeather() : LiveData<MutableList<Pair<CurrentWeather, ForecastWeather>>>
     {
-        return weatherRepository.observeCurrentWeather(currentWeather)
-            .combineWith(weatherRepository.observeForecastWeather(currentWeather.name))  { resultCurrentWeather, resultForecastWeather ->
-            Pair(resultCurrentWeather, resultForecastWeather)
+        val list = MutableLiveData<MutableList<Pair<CurrentWeather, ForecastWeather>>>()
+        viewModelScope.launch {
+            val currentWeatherResponse = async { weatherRepository.getAllCurrentWeather() }
+            val forecastWeatherResponse = async { weatherRepository.getAllForecastWeather() }
+
+            val listOfCurrentWeather = currentWeatherResponse.await()
+            val listOfForecastWeather = forecastWeatherResponse.await()
+
+            val pair = getCoupledList(listOfCurrentWeather, listOfForecastWeather)
+            list.postValue(pair)
         }
+        return list
     }
 
-    fun getCurrentWeather(currentWeather: CurrentWeather) = weatherRepository.observeCurrentWeather(currentWeather)
+    private fun getCoupledList(listOfCurrentWeather: List<CurrentWeather>, listOfForecastWeather: List<ForecastWeather>) : MutableList<Pair<CurrentWeather, ForecastWeather>>
+    {
+        val pair : MutableList<Pair<CurrentWeather, ForecastWeather>> = mutableListOf()
+
+        for (currentWeather in listOfCurrentWeather)
+        {
+            val forecastWeather = listOfForecastWeather.find {
+                it.cityName == currentWeather.name
+            }
+            forecastWeather?.let {
+                pair.add(Pair(currentWeather, forecastWeather))
+            }
+        }
+
+        return pair
+    }
     fun observeWeather(currentWeather: CurrentWeather) = weatherRepository.observeWeather(currentWeather)
-    fun getForecastWeather(cityName: String) = weatherRepository.observeForecastWeather(cityName)
-
-
-    fun getForecastWeatherLocal(cityName: String) = weatherRepository.getForecastWeatherLocal(cityName)
 }

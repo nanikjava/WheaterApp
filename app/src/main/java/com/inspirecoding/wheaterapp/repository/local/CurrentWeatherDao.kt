@@ -9,7 +9,7 @@ import com.inspirecoding.wheaterapp.util.Status
 interface CurrentWeatherDao
 {
     @Query ("SELECT * FROM CurrentWeather ORDER BY position ASC")
-    fun getAllCurrentWeather() : LiveData<List<CurrentWeather>>
+    suspend fun getAllCurrentWeather() : List<CurrentWeather>
     @Query ("SELECT * FROM CurrentWeather WHERE name = :cityName")
     fun getCurrentWeather(cityName: String) : LiveData<CurrentWeather>
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -22,5 +22,5 @@ interface CurrentWeatherDao
 
 
     @Query("SELECT COUNT(name) FROM CurrentWeather")
-    fun getTableSize() : LiveData<Int>
+    suspend fun getTableSize() : Int
 }
