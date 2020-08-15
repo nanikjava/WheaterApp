@@ -82,16 +82,9 @@ class CurrentWeatherAdapter (
             binding.ivWeatherIcon.setImageResource(weatherDesc.second)
 
             binding.rvThreehoursForecast.apply {
-                weather.second.list?.let { _list ->
+                weather.second.hourly?.let { _list ->
                     adapter = ThreeHoursForecastAdapter(_list)
                 }
-            }
-        }
-
-        private fun initRecyclerView(listOfCities: MutableList<List>)
-        {
-            binding.rvThreehoursForecast.apply {
-                adapter = ThreeHoursForecastAdapter(listOfCities)
             }
         }
     }

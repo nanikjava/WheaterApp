@@ -3,7 +3,7 @@ package com.inspirecoding.wheaterapp.model
 import androidx.annotation.NonNull
 import androidx.room.*
 import com.google.gson.annotations.SerializedName
-import com.inspirecoding.wheaterapp.util.ListOfWeatherConverter
+import com.inspirecoding.wheaterapp.util.converters.ListOfWeatherConverter
 import kotlin.collections.List
 
 @Entity(tableName = "CurrentWeather")

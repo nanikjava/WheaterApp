@@ -1,4 +1,4 @@
-package com.inspirecoding.wheaterapp.util
+package com.inspirecoding.wheaterapp.util.converters
 
 import androidx.room.TypeConverter
 import com.google.gson.Gson

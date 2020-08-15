@@ -27,12 +27,14 @@ class WeatherRepositoryImpl @Inject constructor (
     override suspend fun getCurrentWeather(endUrl: String) : Resource<CurrentWeather>
     {
         return getResult {
+            Timber.d("EndURL: $endUrl")
             weatherServiceAPI.getCurrentWeather(endUrl)
         }
     }
     override suspend fun getForecastWeatherRemote(endUrl: String): Resource<ForecastWeather>
     {
         return getResult {
+            Timber.d("EndURL: $endUrl")
             weatherServiceAPI.getForecastWeather(endUrl)
         }
     }
@@ -62,8 +64,13 @@ class WeatherRepositoryImpl @Inject constructor (
         networkCall = {
             getResult {
                 runBlocking {
-                    val currentWeatherEndUrl = Common.createEndUrl_currentWeather(currentWeather.name, "metric")
-                    val forecastWeatherEndUrl = Common.createEndUrl_forecastWeather(currentWeather.name, "metric")
+                    val currentWeatherEndUrl = Common.createEndUrl_currentWeather (
+                                                    currentWeather.name,
+                                                    "metric")
+                    val forecastWeatherEndUrl = Common.createEndUrl_forecastWeather (
+                                                    currentWeather.coord.latitude,
+                                                    currentWeather.coord.longitude,
+                                                    "metric")
                     val currentWeatherResponse = async { weatherServiceAPI.getCurrentWeather(currentWeatherEndUrl) }
                     val forecastWeatherResponse = async { weatherServiceAPI.getForecastWeather(forecastWeatherEndUrl) }
                     Response.success(Pair(currentWeatherResponse.await().body(), forecastWeatherResponse.await().body()))

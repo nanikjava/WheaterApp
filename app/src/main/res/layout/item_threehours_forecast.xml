@@ -4,54 +4,57 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="date"
             type="String" />
+
         <variable
-            name="main"
-            type="com.inspirecoding.wheaterapp.model.Main" />
+            name="temp"
+            type="Double" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/icon_margin" >
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/tv_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textColor="@android:color/black"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             android:textAlignment="center"
-            tools:text="Today\n13.00"/>
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/three_hour_forecast_textsize"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Today\n13.00" />
 
         <ImageView
             android:id="@+id/iv_weather_icon"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            tools:src="@drawable/ic_broken_clouds"
             android:layout_margin="@dimen/icon_margin"
-            app:layout_constraintTop_toBottomOf="@id/tv_date"
             app:layout_constraintBottom_toTopOf="@id/tv_temperature"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toBottomOf="@id/tv_date"
+            tools:src="@drawable/ic_broken_clouds" />
 
         <TextView
             android:id="@+id/tv_temperature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:textColor="@android:color/black"
-            android:text="@{@string/temperature_with_degree(main.temp)}"
-            app:layout_constraintTop_toBottomOf="@id/iv_weather_icon"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@{@string/temperature_with_degree(temp)}"
             android:textAlignment="center"
-            tools:text="29°"/>
+            android:textColor="@android:color/black"
+            android:textSize="@dimen/three_hour_forecast_textsize"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/iv_weather_icon"
+            tools:text="29°" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -2,11 +2,12 @@ package com.inspirecoding.wheaterapp.util
 
 import android.content.Context
 import com.inspirecoding.wheaterapp.R
+import timber.log.Timber
 
 object Common
 {
     const val WEATHER_BASE_URL = "http://api.openweathermap.org/data/2.5/"
-    const val API_KEY = "754a696a08f9991eee2e73454a6bfdbe"
+    const val API_KEY = "5284852183d08ec2ab5bb51447fddf39"
 
 
 
@@ -16,11 +17,13 @@ object Common
             "weather?q=%s&units=%s&appid=%s",
             city, unit, API_KEY)
     }
-    fun createEndUrl_forecastWeather(city: String, unit: String) : String
+    fun createEndUrl_forecastWeather(latitude: Double, longitude: Double, unit: String) : String
     {
-        return java.lang.String.format (
-            "forecast?q=%s&units=%s&appid=%s",
-            city, unit, API_KEY)
+        val stringUrl = java.lang.String.format (
+            "onecall?lat=%s&lon=%s&units=%s&appid=%s",
+            latitude, longitude, unit, API_KEY)
+        Timber.d(stringUrl)
+        return stringUrl
     }
     
     fun getWeatherDescription(description: String?, context: Context) : Pair<String , Int>

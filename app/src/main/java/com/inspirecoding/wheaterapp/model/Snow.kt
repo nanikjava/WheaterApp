@@ -4,12 +4,11 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
-@Entity (tableName = "Clouds")
-data class Clouds (
+@Entity(tableName = "Snow")
+data class Snow (
 
     @PrimaryKey(autoGenerate = true)
-    var cloudsId: Int? = 0,
-
-    @SerializedName("all")
-    var all: Int? = null
+    var snowId: Int? = 0,
+    @SerializedName("1h")
+    var oneHour: Int = 0
 )

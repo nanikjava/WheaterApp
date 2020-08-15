@@ -7,13 +7,17 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.inspirecoding.wheaterapp.model.CurrentWeather
 import com.inspirecoding.wheaterapp.model.ForecastWeather
-import com.inspirecoding.wheaterapp.util.ListOfListConverter
-import com.inspirecoding.wheaterapp.util.ListOfWeatherConverter
+import com.inspirecoding.wheaterapp.util.converters.*
 
 @Database (
     entities = [CurrentWeather::class, ForecastWeather::class],
-    version = 15)
-@TypeConverters(ListOfWeatherConverter::class, ListOfListConverter::class)
+    version = 17)
+@TypeConverters(
+    ListOfWeatherConverter::class,
+    ListOfListConverter::class,
+    ListOfMinutelyConverter::class,
+    ListOfHourlyConverter::class,
+    ListOfDailyConverter::class)
 abstract class WeatherDatabase : RoomDatabase()
 {
     abstract fun currentWeatherDao() : CurrentWeatherDao

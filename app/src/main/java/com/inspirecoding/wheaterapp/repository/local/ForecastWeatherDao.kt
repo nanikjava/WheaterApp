@@ -21,6 +21,6 @@ interface ForecastWeatherDao
 
 
 
-    @Query("SELECT COUNT(name) FROM ForecastWeather")
+    @Query("SELECT COUNT(cityName) FROM ForecastWeather")
     fun getTableSize() : LiveData<Int>
 }

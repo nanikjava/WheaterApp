@@ -11,7 +11,7 @@ data class Coord (
     var coordId: Int? = 0,
 
     @SerializedName ("lon")
-    var longitude : Double? = null,
+    var longitude : Double = 0.0,
     @SerializedName ("lat")
-    var latitude : Double? = null
+    var latitude : Double = 0.0
 )

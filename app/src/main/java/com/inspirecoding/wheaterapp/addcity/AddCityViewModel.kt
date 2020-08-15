@@ -11,6 +11,7 @@ import com.inspirecoding.wheaterapp.util.Common
 import com.inspirecoding.wheaterapp.util.combineWith
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.*
+import timber.log.Timber
 
 class AddCityViewModel @ViewModelInject constructor (
     @ApplicationContext private val  applicationContext: Context,
@@ -41,38 +42,46 @@ class AddCityViewModel @ViewModelInject constructor (
             try
             {
                 val currentWeatherEndUrl = Common.createEndUrl_currentWeather(city, "metric")
-                val forecastWeatherEndUrl = Common.createEndUrl_forecastWeather(city, "metric")
-                val deferreds = listOf(
-                    async { weatherRepository.getCurrentWeather(currentWeatherEndUrl) },
-                    async { weatherRepository.getForecastWeatherRemote(forecastWeatherEndUrl) }
-                )
+                val currentWeatherAsync = async { weatherRepository.getCurrentWeather(currentWeatherEndUrl) }
+                val currentWeather = currentWeatherAsync.await().data
 
-                deferreds.awaitAll().apply {
-                    foundCurrentWeatherOfCity = if(this[0].data != null) {
-                        this[0].data as CurrentWeather
-                    } else {
-                        null
-                    }
-                    foundForecastWeatherOfCity = if(this[1].data != null) {
-                        this[1].data as ForecastWeather
-                    } else {
-                        null
-                    }
+                var forecastWeather : ForecastWeather? = ForecastWeather()
+                val lat = currentWeather?.coord?.latitude
+                val long = currentWeather?.coord?.longitude
+                Timber.d("Lat: ${lat}, Lon: ${long}")
 
-                    if (foundCurrentWeatherOfCity == null)
-                    {
-                        _hasCityFound.postValue(false)
-                        _resultText.postValue(applicationContext.getString(R.string.no_city_found))
-                        _city.postValue(null)
-                    }
-                    else
-                    {
-                        _hasCityFound.postValue(true)
-                        _resultText.postValue(applicationContext.getString(R.string.result))
-                        _city.postValue("${(foundCurrentWeatherOfCity as CurrentWeather).name}, ${(foundCurrentWeatherOfCity as CurrentWeather).sys.country}")
-                    }
-                    _isLoading.postValue(false)
+                if (lat != null && long != null)
+                {
+                    val forecastWeatherEndUrl = Common.createEndUrl_forecastWeather(49.2, 16.61, "metric")
+                    val forecastWeatherAsync = async { weatherRepository.getForecastWeatherRemote(forecastWeatherEndUrl) }
+                    forecastWeather = forecastWeatherAsync.await().data
+                    Timber.d("$forecastWeather")
                 }
+                foundCurrentWeatherOfCity = if(currentWeather != null) {
+                    currentWeather
+                } else {
+                    null
+                }
+                foundForecastWeatherOfCity = if(forecastWeather != null) {
+                    forecastWeather
+                } else {
+                    null
+                }
+                Timber.d("$foundForecastWeatherOfCity")
+
+                if (foundCurrentWeatherOfCity == null)
+                {
+                    _hasCityFound.postValue(false)
+                    _resultText.postValue(applicationContext.getString(R.string.no_city_found))
+                    _city.postValue(null)
+                }
+                else
+                {
+                    _hasCityFound.postValue(true)
+                    _resultText.postValue(applicationContext.getString(R.string.result))
+                    _city.postValue("${(foundCurrentWeatherOfCity as CurrentWeather).name}, ${(foundCurrentWeatherOfCity as CurrentWeather).sys.country}")
+                }
+                _isLoading.postValue(false)
             }
             catch (exception: Exception)
             {

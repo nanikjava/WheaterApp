@@ -6,12 +6,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.inspirecoding.wheaterapp.R
 import com.inspirecoding.wheaterapp.databinding.ItemThreehoursForecastBinding
-import com.inspirecoding.wheaterapp.model.List
+import com.inspirecoding.wheaterapp.model.Hourly
 import com.inspirecoding.wheaterapp.util.Common
 import com.inspirecoding.wheaterapp.util.DateConverters
 
 class ThreeHoursForecastAdapter (
-    val listOfForecastWeather : kotlin.collections.List<List>
+    val listOfForecastWeather : List<Hourly>
 ) : RecyclerView.Adapter<ThreeHoursForecastAdapter.ThreeHoursForecastViewHolder>()
 {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):  ThreeHoursForecastViewHolder
@@ -34,16 +34,16 @@ class ThreeHoursForecastAdapter (
 
     inner class ThreeHoursForecastViewHolder constructor(val binding: ItemThreehoursForecastBinding) : RecyclerView.ViewHolder(binding.root)
     {
-        fun bind (list: List)
+        fun bind (hourly: Hourly)
         {
-            binding.tvDate.text = DateConverters.getDateForThreeHoursForecast(list.dt.toLong(), binding.root.context)
+            binding.tvDate.text = DateConverters.getDateForThreeHoursForecast(hourly.dt, binding.root.context)
 
             val weatherDesc = Common.getWeatherDescription(
-                list.weather?.get(0)?.description, binding.root.context
+                hourly.weather?.get(0)?.description, binding.root.context
             )
             binding.ivWeatherIcon.setImageResource(weatherDesc.second)
 
-            binding.main = list.main
+            binding.temp = hourly.temp
         }
     }
 }
