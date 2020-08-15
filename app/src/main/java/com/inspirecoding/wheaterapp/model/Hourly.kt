@@ -23,17 +23,17 @@ data class Hourly (
     @SerializedName("pressure")
     val pressure: Double? = null,
     @SerializedName("humidity")
-    val humidity: Int? = null,
+    val humidity: Double? = null,
     @SerializedName("dew_point")
     val dew_point: Double? = null,
     @SerializedName("clouds")
-    val clouds: Int? = null,
+    val clouds: Double? = null,
     @SerializedName("visibility")
-    val visibility: Int? = null,
+    val visibility: Double? = null,
     @SerializedName("wind_speed")
-    val wind_speed: Int? = null,
+    val wind_speed: Double? = null,
     @SerializedName("wind_deg")
-    val wind_deg: Int? = null,
+    val wind_deg: Double? = null,
     @SerializedName("weather")
     @TypeConverters(ListOfWeatherConverter::class)
     val weather: List<Weather>? = null,

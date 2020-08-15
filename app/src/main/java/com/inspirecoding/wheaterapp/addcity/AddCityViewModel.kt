@@ -52,7 +52,7 @@ class AddCityViewModel @ViewModelInject constructor (
 
                 if (lat != null && long != null)
                 {
-                    val forecastWeatherEndUrl = Common.createEndUrl_forecastWeather(49.2, 16.61, "metric")
+                    val forecastWeatherEndUrl = Common.createEndUrl_forecastWeather(lat, long, "metric")
                     val forecastWeatherAsync = async { weatherRepository.getForecastWeatherRemote(forecastWeatherEndUrl) }
                     forecastWeather = forecastWeatherAsync.await().data
                     Timber.d("$forecastWeather")

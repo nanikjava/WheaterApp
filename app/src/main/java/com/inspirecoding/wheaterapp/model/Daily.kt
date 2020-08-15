@@ -5,6 +5,7 @@ import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import kotlin.collections.List
 
 @Entity(tableName = "Daily")
 data class Daily(
@@ -14,7 +15,6 @@ data class Daily(
 
 
     @SerializedName("dt")
-    @ColumnInfo(name = "dt")
     val dt: Long? = null,
     @SerializedName("sunrise")
     val sunrise: Int? = null,
@@ -38,13 +38,13 @@ data class Daily(
     val wind_deg: Int? = null,
     @SerializedName("weather")
     @Embedded
-    val weather: Weather? = null,
+    val weather: List<Weather>? = null,
     @SerializedName("clouds")
-    val clouds: Int? = null,
+    val clouds: Double? = null,
     @SerializedName("pop")
-    val pop: Int? = null,
-    @SerializedName("rain")
-    val rain: Double? = null,
+    val pop: Double? = null,
     @SerializedName("uvi")
-    val uvi: Double? = null
+    val uvi: Double? = null,
+    @SerializedName("visibility")
+    val visibility: Double? = null
 )
