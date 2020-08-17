@@ -1,23 +1,18 @@
 package com.inspirecoding.wheaterapp.weather.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
-import androidx.lifecycle.observe
 import androidx.recyclerview.widget.RecyclerView
 import com.inspirecoding.wheaterapp.R
 import com.inspirecoding.wheaterapp.databinding.ItemCurrentweatherBinding
 import com.inspirecoding.wheaterapp.model.CurrentWeather
 import com.inspirecoding.wheaterapp.model.ForecastWeather
-import com.inspirecoding.wheaterapp.model.List
 import com.inspirecoding.wheaterapp.util.Common
 import com.inspirecoding.wheaterapp.util.DateConverters
-import com.inspirecoding.wheaterapp.util.Status
-import com.inspirecoding.wheaterapp.weather.WeatherViewModel
-import timber.log.Timber
+
 
 class CurrentWeatherAdapter (
     val listOfCurrentWeather: MutableList<Pair<CurrentWeather, ForecastWeather>>
@@ -59,13 +54,20 @@ class CurrentWeatherAdapter (
 
     override fun getItemCount() = listOfCurrentWeather.size
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(currentWeatherViewHolder: CurrentWeatherViewHolder, position: Int)
     {
+        currentWeatherViewHolder.itemView.setOnTouchListener { view, motionEvent ->
+            view.parent.parent.requestDisallowInterceptTouchEvent(true)
+            false
+        }
+
         currentWeatherViewHolder.bind(listOfCurrentWeather[position])
     }
 
     inner class CurrentWeatherViewHolder constructor(val binding: ItemCurrentweatherBinding) : RecyclerView.ViewHolder(binding.root)
     {
+        @SuppressLint("ClickableViewAccessibility")
         fun bind (weather: Pair<CurrentWeather, ForecastWeather>)
         {
             binding.city = weather.first.name
@@ -86,6 +88,39 @@ class CurrentWeatherAdapter (
                     adapter = ThreeHoursForecastAdapter(_list)
                 }
             }
+            binding.rvThreehoursForecast.setOnTouchListener { view, motionEvent ->
+                when (motionEvent.action)
+                {
+                    MotionEvent.ACTION_DOWN -> {
+                        view.parent.requestDisallowInterceptTouchEvent(true)
+                    }
+                    MotionEvent.ACTION_UP -> {
+                        view.parent.requestDisallowInterceptTouchEvent(false)
+                    }
+                }
+                view.onTouchEvent(motionEvent)
+            }
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
