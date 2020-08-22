@@ -5,13 +5,17 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.inspirecoding.wheaterapp.R
+import com.inspirecoding.wheaterapp.databinding.CurrentweatherDetailsBinding
 import com.inspirecoding.wheaterapp.databinding.ItemCurrentweatherBinding
 import com.inspirecoding.wheaterapp.model.CurrentWeather
+import com.inspirecoding.wheaterapp.model.Daily
 import com.inspirecoding.wheaterapp.model.ForecastWeather
 import com.inspirecoding.wheaterapp.util.Common
 import com.inspirecoding.wheaterapp.util.DateConverters
+import timber.log.Timber
 
 
 class CurrentWeatherAdapter (
@@ -65,11 +69,13 @@ class CurrentWeatherAdapter (
         currentWeatherViewHolder.bind(listOfCurrentWeather[position])
     }
 
-    inner class CurrentWeatherViewHolder constructor(val binding: ItemCurrentweatherBinding) : RecyclerView.ViewHolder(binding.root)
+    class CurrentWeatherViewHolder constructor(val binding: ItemCurrentweatherBinding) : RecyclerView.ViewHolder(binding.root)
     {
         @SuppressLint("ClickableViewAccessibility")
         fun bind (weather: Pair<CurrentWeather, ForecastWeather>)
         {
+            Timber.d("${weather.first}")
+
             binding.city = weather.first.name
             binding.main = weather.first.main
 
@@ -83,11 +89,25 @@ class CurrentWeatherAdapter (
             binding.weatherDesc = weatherDesc.first
             binding.ivWeatherIcon.setImageResource(weatherDesc.second)
 
+            // Init hourly forecast
             binding.rvThreehoursForecast.apply {
                 weather.second.hourly?.let { _list ->
                     adapter = ThreeHoursForecastAdapter(_list)
                 }
             }
+
+            // Init daily forecast
+            binding.rvDailyForecast.apply {
+                val linearLayoutManager = LinearLayoutManager(binding.root.context)
+                layoutManager = linearLayoutManager
+
+                weather.second.daily?.let {  _list ->
+                    val newList = _list.drop(1)
+                    adapter = DailyForecastAdapter(newList)
+                }
+            }
+
+            // Stop vertical scroll of ViewPager when vertically scrolling in RV
             binding.rvThreehoursForecast.setOnTouchListener { view, motionEvent ->
                 when (motionEvent.action)
                 {
@@ -100,6 +120,13 @@ class CurrentWeatherAdapter (
                 }
                 view.onTouchEvent(motionEvent)
             }
+
+            binding.tvSunriseData.text = DateConverters.getTime(weather.first.sys.sunrise.toLong())
+            binding.tvSunsetData.text = DateConverters.getTime(weather.first.sys.sunset.toLong())
+
+            binding.humidity =   weather.first.main.humidity
+            binding.windSpeed =   weather.first.wind.speed
+            binding.feelsLike =   weather.second.current.feels_like
         }
     }
 

@@ -1,5 +1,6 @@
 package com.inspirecoding.wheaterapp.weather
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -14,6 +15,7 @@ import com.inspirecoding.wheaterapp.databinding.WeatherFragmentBinding
 import com.inspirecoding.wheaterapp.model.CurrentWeather
 import com.inspirecoding.wheaterapp.model.ForecastWeather
 import com.inspirecoding.wheaterapp.util.Status
+import com.inspirecoding.wheaterapp.util.reduceDragSensitivity
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -38,6 +40,7 @@ class WeatherFragment : Fragment()
 
         return binding.root
     }
+
     override fun onActivityCreated(savedInstanceState: Bundle?)
     {
         super.onActivityCreated(savedInstanceState)
@@ -45,6 +48,9 @@ class WeatherFragment : Fragment()
         setHasOptionsMenu(true)
 
         setupListOfSelectedCitiesObserver()
+
+        binding.viewPager2.reduceDragSensitivity()
+
 
         binding.swipeRefreshLayout.setOnRefreshListener {
             setupListOfSelectedCitiesObserver()
@@ -120,7 +126,9 @@ class WeatherFragment : Fragment()
             adapter = currentWeatherAdapter
         }
 
-        TabLayoutMediator(binding.tabLayout, binding.viewPager2) { tab, position -> }.attach()
+        TabLayoutMediator(binding.tabLayout, binding.viewPager2) { tab, position ->
+            tab.text = listOfCities[position].first.name
+        }.attach()
     }
     private fun navigateToAddCityFragment()
     {

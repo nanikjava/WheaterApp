@@ -43,14 +43,18 @@ object DateConverters
         val futureDate = datestampToCalendar(timeStamp*1000)
         val dayOfFutureDay = futureDate.get(Calendar.DAY_OF_MONTH)
 
-        Timber.d("Difference: $dayOfFutureDay - $dayOfToday")
-
         return when(dayOfFutureDay-dayOfToday)
         {
             0 ->  getTodayAndDateString(futureDate.time, context)
             1 ->  getTomorrowAndDateString(futureDate.time, context)
             else -> getOtherDaysDateString(futureDate, context)
         }
+    }
+
+    fun getTime(timeStamp: Long) : String
+    {
+        val time = datestampToCalendar(timeStamp*1000)
+        return time.time.toLocaleString().substringAfterLast(" ")
     }
 
     private fun getTodayAndDateString(date: Date, context: Context) : String
@@ -65,10 +69,7 @@ object DateConverters
     {
         val res = context.resources
         val daysOfWeek = res.getStringArray(R.array.days_of_week)
-        daysOfWeek.forEach {
-            Timber.d("DAY_OF_WEEK: ${it}")
-        }
-        Timber.d("DAY_OF_WEEK: ${calendar.get(Calendar.DAY_OF_WEEK)} - ${daysOfWeek.iterator()}")
+
         val intOfDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK)-1
         val stringOfDayOfWeek = daysOfWeek[intOfDayOfWeek]
 

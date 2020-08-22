@@ -120,8 +120,8 @@ class SelectedCitiesFragment : Fragment()
             }
             else
             {
-                initRecyclerView(_listOfCities)
                 viewModel.listOfSelectedCities = _listOfCities.toMutableList()
+                initRecyclerView(viewModel.listOfSelectedCities)
             }
         })
     }

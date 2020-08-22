@@ -25,7 +25,7 @@ data class ForecastWeather(
     var timezone_offset: Int? = null,
     @SerializedName("current")
     @Embedded
-    var current: Current? = null,
+    var current: Current = Current(),
     @SerializedName("minutely")
     @TypeConverters(ListOfMinutelyConverter::class)
     val minutely: List<Minutely>? = null,

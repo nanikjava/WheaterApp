@@ -10,4 +10,5 @@
     <color name="grey">#CECECE</color>
     <color name="light_blue">#B7D4EA</color>
     <color name="yellow">#FFB100</color>
+    <color name="textView_value">#000000</color>
 </resources>

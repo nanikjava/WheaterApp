@@ -32,7 +32,7 @@ class ThreeHoursForecastAdapter (
         holder.bind(listOfForecastWeather[position])
     }
 
-    inner class ThreeHoursForecastViewHolder constructor(val binding: ItemThreehoursForecastBinding) : RecyclerView.ViewHolder(binding.root)
+    class ThreeHoursForecastViewHolder constructor(val binding: ItemThreehoursForecastBinding) : RecyclerView.ViewHolder(binding.root)
     {
         fun bind (hourly: Hourly)
         {

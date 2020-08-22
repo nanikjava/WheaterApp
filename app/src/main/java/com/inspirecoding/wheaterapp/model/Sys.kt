@@ -17,8 +17,8 @@ data class Sys(
     val country: String? = null,
 
     @SerializedName("sunrise")
-    val sunrise: Int? = null,
+    val sunrise: Int = 0,
 
     @SerializedName("sunset")
-    val sunset: Int? = null
+    val sunset: Int = 0
 )

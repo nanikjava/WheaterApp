@@ -15,7 +15,7 @@ data class Daily(
 
 
     @SerializedName("dt")
-    val dt: Long? = null,
+    val dt: Long = 0,
     @SerializedName("sunrise")
     val sunrise: Int? = null,
     @SerializedName("sunset")

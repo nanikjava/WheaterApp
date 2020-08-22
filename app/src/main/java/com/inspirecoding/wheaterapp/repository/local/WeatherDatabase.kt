@@ -11,7 +11,7 @@ import com.inspirecoding.wheaterapp.util.converters.*
 
 @Database (
     entities = [CurrentWeather::class, ForecastWeather::class],
-    version = 24)
+    version = 27)
 @TypeConverters(
     ListOfWeatherConverter::class,
     ListOfListConverter::class,

@@ -11,6 +11,9 @@ data class Rain (
     @PrimaryKey(autoGenerate = true)
     var rainId: Int? = 0,
 
+    @SerializedName("1h")
+    var _1h: Double? = null,
+
     @SerializedName("3h")
     var _3h: Double? = null
 )
