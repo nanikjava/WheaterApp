@@ -19,7 +19,7 @@
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.inspirecoding.wheaterapp.settings.SettingsFragment"
-        android:label="fragment_settings"
+        android:label="@string/settings"
         tools:layout="@layout/fragment_settings" />
     <fragment
         android:id="@+id/splashFragment"

@@ -138,6 +138,10 @@ class WeatherFragment : Fragment()
     {
         findNavController().navigate(R.id.action_weatherFragment_to_listOfCitiesFragment)
     }
+    private fun navigateToSettingsFragment()
+    {
+        findNavController().navigate(R.id.action_weatherFragment_to_settingsFragment)
+    }
     override fun onCreateOptionsMenu(menu: Menu, menuInflater: MenuInflater)
     {
         menuInflater.inflate(R.menu.menu_cities_settings, menu)
@@ -152,12 +156,13 @@ class WeatherFragment : Fragment()
                 return true
             }
             R.id.item_settings -> {
+                navigateToSettingsFragment()
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
-
     }
+
     private fun setupSpinner(show: Boolean)
     {
         binding.swipeRefreshLayout.isRefreshing = show

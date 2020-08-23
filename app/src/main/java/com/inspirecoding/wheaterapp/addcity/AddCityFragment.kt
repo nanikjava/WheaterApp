@@ -84,7 +84,6 @@ class AddCityFragment : Fragment()
                 viewModel.foundForecastWeatherOfCity!!.cityName = viewModel.foundCurrentWeatherOfCity!!.name
 
                 viewModel.insertWeather().observe(viewLifecycleOwner) { _result ->
-                    Toast.makeText(context, "$_result", Toast.LENGTH_LONG).show()
                     if(_result.first != null && _result.second != null)
                     {
                         navigateToWeatherFragment()

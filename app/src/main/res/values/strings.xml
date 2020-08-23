@@ -10,6 +10,7 @@
     <string name="current_weather">Current weather</string>
     <string name="add_city">Add city</string>
     <string name="selected_cities">Selected cities</string>
+    <string name="settings">Settings</string>
 
     <string name="error_occurred">Oops … something went wrong</string>
 
@@ -108,6 +109,11 @@
     <string name="humidity">Humidity</string>
     <string name="wind">Wind</string>
     <string name="feels_like">Feels like</string>
+    <string name="temperature_unit">Temperature unit</string>
+
+    <string name="celsius">C°</string>
+    <string name="fahrenheit">F°</string>
+    <string name="dark_mode">Dark mode</string>
 
     <string-array name="days_of_week">
         <item>Sunday</item>

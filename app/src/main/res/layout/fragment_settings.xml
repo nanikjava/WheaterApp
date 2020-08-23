@@ -1,14 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".settings.SettingsFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_margin="@dimen/side_margin"
+        tools:context=".settings.SettingsFragment">
 
-</FrameLayout>
+        <TextView
+            android:id="@+id/tv_unit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/temperature_unit"
+            android:textSize="@dimen/settings_text_size"
+            android:paddingTop="@dimen/icon_margin"
+            android:paddingBottom="@dimen/icon_margin"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_unit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="@dimen/switch_textSize"
+            android:thumb="@drawable/switch_thumb_blue"
+            app:showText="true"
+            android:textOn="@string/celsius"
+            android:textOff="@string/fahrenheit"
+            app:track="@drawable/switch_track_blue"
+            app:switchTextAppearance="@style/switchTextAppearance"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_unit"
+            app:layout_constraintBottom_toBottomOf="@id/tv_unit"/>
+
+        <TextView
+            android:id="@+id/tv_darkMode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/dark_mode"
+            android:textSize="@dimen/settings_text_size"
+            android:layout_marginTop="@dimen/icon_margin"
+            android:paddingTop="@dimen/icon_margin"
+            android:paddingBottom="@dimen/icon_margin"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_unit" />
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_darkMode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="20sp"
+            android:thumb="@drawable/switch_thumb_gray_blue"
+            app:showText="true"
+            app:track="@drawable/switch_track_gray_blue"
+            app:switchTextAppearance="@style/switchTextAppearance"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tv_darkMode"
+            app:layout_constraintBottom_toBottomOf="@id/tv_darkMode"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

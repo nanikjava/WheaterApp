@@ -8,12 +8,16 @@
     <dimen name="toolbar_margin">16dp</dimen>
 
     <dimen name="three_hour_forecast_textsize">12sp</dimen>
+    <dimen name="settings_text_size">18sp</dimen>
     <dimen name="mcw_weather_main_textsize">24sp</dimen>
     <dimen name="mcw_city_textsize">30sp</dimen>
     <dimen name="mcw_temp_textsize">60sp</dimen>
     <dimen name="add_city_result_text_size">24sp</dimen>
     <dimen name="mcw_radius">12dp</dimen>
     <dimen name="mcw_elevation">6dp</dimen>
+
+    <dimen name="settings_textSize">20sp</dimen>
+    <dimen name="switch_textSize">12sp</dimen>
 
 
 </resources>

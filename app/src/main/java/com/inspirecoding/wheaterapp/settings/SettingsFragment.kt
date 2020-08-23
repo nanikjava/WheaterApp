@@ -6,12 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.inspirecoding.wheaterapp.R
+import com.inspirecoding.wheaterapp.databinding.FragmentSettingsBinding
 
 class SettingsFragment : Fragment()
 {
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
+    private lateinit var binding: FragmentSettingsBinding
+
+    override fun onCreateView(layoutInflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
     {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_settings, container, false)
+        binding = FragmentSettingsBinding.inflate(
+            layoutInflater, container, false
+        )
+
+        return binding.root
     }
 }
