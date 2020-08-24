@@ -7,8 +7,9 @@ import timber.log.Timber
 object Common
 {
     const val WEATHER_BASE_URL = "http://api.openweathermap.org/data/2.5/"
-    const val API_KEY = "5284852183d08ec2ab5bb51447fddf39"
+    private const val API_KEY = "5284852183d08ec2ab5bb51447fddf39"
 
+    const val SHARED_PREFERENCES = "shared_preferences"
 
 
     fun createEndUrl_currentWeather(city: String, unit: String) : String

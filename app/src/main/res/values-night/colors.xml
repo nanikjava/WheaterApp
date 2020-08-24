@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="appbar_background">#121212</color>
+    <color name="switch_track_background">#404040</color>
+
+    <color name="current_weather_textView_value">#ffffff</color>
+
+    <color name="search_field_background">#404040</color>
+    <color name="search_hint">#7F7F7F</color>
+    <color name="search_example">#FFB100</color>
+
+</resources>

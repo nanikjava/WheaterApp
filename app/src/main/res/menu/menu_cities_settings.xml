@@ -4,13 +4,13 @@
 
     <item
         android:id="@+id/item_cities"
-        android:title="Cities"
+        android:title="@string/cities"
         android:icon="@drawable/ic_cities"
-        app:showAsAction="always"/>
+        app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/item_settings"
-        android:title="Settings"
+        android:title="@string/settings"
         android:icon="@drawable/ic_settings"
-        app:showAsAction="always"/>
+        app:showAsAction="ifRoom"/>
 
 </menu>

@@ -10,7 +10,7 @@ import javax.inject.Singleton
 
 @InstallIn(ApplicationComponent::class)
 @Module
-class LocalDatabaseModul
+class LocalDatabaseModule
 {
     @Singleton
     @Provides

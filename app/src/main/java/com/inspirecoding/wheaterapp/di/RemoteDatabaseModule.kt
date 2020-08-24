@@ -13,7 +13,7 @@ import javax.inject.Singleton
 
 @InstallIn(ApplicationComponent::class)
 @Module
-class RemoteDatabaseModul
+class RemoteDatabaseModule
 {
     @Provides
     @Singleton

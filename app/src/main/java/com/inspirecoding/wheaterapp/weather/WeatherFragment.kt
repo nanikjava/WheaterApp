@@ -1,6 +1,5 @@
 package com.inspirecoding.wheaterapp.weather
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -10,12 +9,12 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import com.inspirecoding.wheaterapp.MainActivity
 import com.inspirecoding.wheaterapp.R
-import com.inspirecoding.wheaterapp.weather.adapter.CurrentWeatherAdapter
 import com.inspirecoding.wheaterapp.databinding.WeatherFragmentBinding
 import com.inspirecoding.wheaterapp.model.CurrentWeather
 import com.inspirecoding.wheaterapp.model.ForecastWeather
 import com.inspirecoding.wheaterapp.util.Status
 import com.inspirecoding.wheaterapp.util.reduceDragSensitivity
+import com.inspirecoding.wheaterapp.weather.adapter.CurrentWeatherAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 

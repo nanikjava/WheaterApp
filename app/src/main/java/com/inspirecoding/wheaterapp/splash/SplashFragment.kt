@@ -1,24 +1,31 @@
 package com.inspirecoding.wheaterapp.splash
 
-import android.app.Activity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import com.inspirecoding.wheaterapp.MainActivity
 import com.inspirecoding.wheaterapp.R
+import com.inspirecoding.wheaterapp.util.SettingsValues
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_splash.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class SplashFragment : Fragment()
 {
     private val coroutineScope = CoroutineScope(Dispatchers.Main)
+
+    private val splashScreenViewModel by viewModels<SplashScreenViewModel>()
 
     override fun onStart()
     {
@@ -35,6 +42,8 @@ class SplashFragment : Fragment()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?)
     {
         super.onViewCreated(view, savedInstanceState)
+
+        getSharedPreferences()
 
         motionLayout.setTransitionListener(object : MotionLayout.TransitionListener {
             override fun onTransitionTrigger(p0: MotionLayout?, p1: Int, p2: Boolean, p3: Float) {
@@ -53,8 +62,8 @@ class SplashFragment : Fragment()
         })
     }
 
-    override fun onResume()
+    private fun getSharedPreferences()
     {
-        super.onResume()
+        splashScreenViewModel.getSharedPreferences()
     }
 }
