@@ -5,13 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.observe
-import com.inspirecoding.wheaterapp.R
 import com.inspirecoding.wheaterapp.databinding.FragmentSettingsBinding
-import com.inspirecoding.wheaterapp.splash.SplashScreenViewModel
+import com.inspirecoding.wheaterapp.util.Common
 import com.inspirecoding.wheaterapp.util.SettingsValues
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -40,7 +38,38 @@ class SettingsFragment : Fragment()
             )
         }
 
+        binding.switchUnit.setOnClickListener { _switch ->
+            if ((_switch as SwitchCompat).isChecked)
+            {
+                settingsViewModel.setUnit(
+                    Common.METRIC
+                )
+            }
+            else
+            {
+                settingsViewModel.setUnit(
+                    Common.IMPERIAL
+                )
+            }
+        }
+
+        /** Set the statuses of switches **/
+        setupUnitObserver()
         setupDarkModeObserver()
+    }
+
+    private fun setupUnitObserver()
+    {
+        SettingsValues.unit.observe(viewLifecycleOwner) { _unit ->
+            if (_unit == Common.IMPERIAL)
+            {
+                binding.switchUnit.isChecked = false
+            }
+            else if (_unit == Common.METRIC)
+            {
+                binding.switchUnit.isChecked = true
+            }
+        }
     }
 
     private fun setupDarkModeObserver()

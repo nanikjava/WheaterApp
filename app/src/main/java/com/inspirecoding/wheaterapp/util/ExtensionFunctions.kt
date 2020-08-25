@@ -1,5 +1,6 @@
 package com.inspirecoding.wheaterapp.util
 
+import android.view.View
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -56,4 +57,17 @@ fun ViewPager2.reduceDragSensitivity()
     touchSlopField.isAccessible = true
     val touchSlop = touchSlopField.get(recyclerView) as Int
     touchSlopField.set(recyclerView, touchSlop*8)       // "8" was obtained experimentally
+}
+
+
+
+
+fun View.show()
+{
+    visibility = View.VISIBLE
+}
+
+fun View.hide()
+{
+    visibility = View.GONE
 }

@@ -1,5 +1,7 @@
 package com.inspirecoding.wheaterapp.addcity
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +14,7 @@ import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import com.inspirecoding.wheaterapp.R
 import com.inspirecoding.wheaterapp.databinding.AddCityFragmentBinding
+import com.inspirecoding.wheaterapp.util.hide
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 

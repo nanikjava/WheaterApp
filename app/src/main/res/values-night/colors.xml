@@ -10,4 +10,6 @@
     <color name="search_hint">#7F7F7F</color>
     <color name="search_example">#FFB100</color>
 
+    <color name="values_colors">#FFB100</color>
+
 </resources>

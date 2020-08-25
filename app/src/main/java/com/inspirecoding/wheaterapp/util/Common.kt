@@ -11,6 +11,9 @@ object Common
 
     const val SHARED_PREFERENCES = "shared_preferences"
 
+    const val METRIC = "metric"
+    const val IMPERIAL = "imperial"
+
 
     fun createEndUrl_currentWeather(city: String, unit: String) : String
     {

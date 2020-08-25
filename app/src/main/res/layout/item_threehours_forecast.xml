@@ -49,6 +49,7 @@
             android:textAlignment="center"
             android:textSize="@dimen/three_hour_forecast_textsize"
             android:textStyle="bold"
+            android:textColor="@color/values_colors"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/iv_weather_icon"

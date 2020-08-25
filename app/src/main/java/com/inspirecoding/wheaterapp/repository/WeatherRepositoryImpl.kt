@@ -10,6 +10,7 @@ import com.inspirecoding.wheaterapp.repository.local.ForecastWeatherDao
 import com.inspirecoding.wheaterapp.repository.remote.BaseDataSource
 import com.inspirecoding.wheaterapp.repository.remote.WeatherServiceAPI
 import com.inspirecoding.wheaterapp.util.Common
+import com.inspirecoding.wheaterapp.util.SettingsValues
 import com.inspirecoding.wheaterapp.util.combineWith
 import kotlinx.coroutines.*
 import retrofit2.Response
@@ -66,11 +67,11 @@ class WeatherRepositoryImpl @Inject constructor (
                 runBlocking {
                     val currentWeatherEndUrl = Common.createEndUrl_currentWeather (
                                                     currentWeather.name,
-                                                    "metric")
+                                                    SettingsValues.unit.value!!)
                     val forecastWeatherEndUrl = Common.createEndUrl_forecastWeather (
                                                     currentWeather.coord.latitude,
                                                     currentWeather.coord.longitude,
-                                                    "metric")
+                                                    SettingsValues.unit.value!!)
                     val currentWeatherResponse = async { weatherServiceAPI.getCurrentWeather(currentWeatherEndUrl) }
                     val forecastWeatherResponse = async { weatherServiceAPI.getForecastWeather(forecastWeatherEndUrl) }
                     Response.success(Pair(currentWeatherResponse.await().body(), forecastWeatherResponse.await().body()))

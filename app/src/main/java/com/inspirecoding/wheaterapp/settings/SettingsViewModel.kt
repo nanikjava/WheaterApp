@@ -34,4 +34,12 @@ class SettingsViewModel @ViewModelInject constructor (
             sharedPreferencesRepository.setDarkMode(darkMode = darkMode)
         }
     }
+    fun setUnit(unit : String)
+    {
+        SettingsValues.setUnit(unit = unit)
+
+        viewModelScope.launch(Dispatchers.IO) {
+            sharedPreferencesRepository.setUnit(unit)
+        }
+    }
 }

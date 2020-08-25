@@ -13,6 +13,8 @@
     <color name="search_hint">#7F7F7F</color>
     <color name="search_example">#7F7F7F</color>
 
+    <color name="values_colors">#000000</color>
+
     <color name="grey">#CECECE</color>
     <color name="light_blue">#B7D4EA</color>
     <color name="yellow">#FFB100</color>
