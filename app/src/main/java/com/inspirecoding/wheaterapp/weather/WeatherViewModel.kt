@@ -5,11 +5,15 @@ import androidx.lifecycle.*
 import com.inspirecoding.wheaterapp.model.CurrentWeather
 import com.inspirecoding.wheaterapp.model.ForecastWeather
 import com.inspirecoding.wheaterapp.model.Resource
+import com.inspirecoding.wheaterapp.model.State
 import com.inspirecoding.wheaterapp.repository.WeatherRepository
 import com.inspirecoding.wheaterapp.util.combineWith
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import retrofit2.Response
+import timber.log.Timber
 
 class WeatherViewModel @ViewModelInject constructor (
     private val weatherRepository: WeatherRepository
@@ -48,4 +52,20 @@ class WeatherViewModel @ViewModelInject constructor (
         return pair
     }
     fun observeWeather(currentWeather: CurrentWeather) = weatherRepository.observeWeather(currentWeather)
+
+
+    private val _currentWeather = MutableLiveData<State<Pair<CurrentWeather?, ForecastWeather?>>>()
+    val currentWeather: LiveData<State<Pair<CurrentWeather?, ForecastWeather?>>> = _currentWeather
+    fun getWeatherOfCity(currentWeather: CurrentWeather)
+    {
+        viewModelScope.launch(Dispatchers.IO){
+            weatherRepository.getWeatherOfCity(currentWeather).collect {
+                Timber.d("collect: ${it}")
+//                _currentWeather.postValue(it)
+            }
+        }
+    }
+
+
+
 }

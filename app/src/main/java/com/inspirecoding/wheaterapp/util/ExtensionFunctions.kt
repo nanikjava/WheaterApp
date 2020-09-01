@@ -1,6 +1,9 @@
 package com.inspirecoding.wheaterapp.util
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.view.View
+import android.widget.LinearLayout
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
@@ -59,7 +62,21 @@ fun ViewPager2.reduceDragSensitivity()
     touchSlopField.set(recyclerView, touchSlop*8)       // "8" was obtained experimentally
 }
 
-
+fun LinearLayout.doAnimation()
+{
+    this.apply {
+        animate()
+            .alpha(1f)
+            .setStartDelay(Common.ANIMATION_DURATION)
+            .setDuration(Common.ANIMATION_DURATION)
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationEnd(animation: Animator?)
+                {
+                    hide()
+                }
+            })
+    }
+}
 
 
 fun View.show()

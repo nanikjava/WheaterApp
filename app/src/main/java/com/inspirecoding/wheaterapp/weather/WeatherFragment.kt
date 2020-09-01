@@ -22,9 +22,7 @@ import timber.log.Timber
 class WeatherFragment : Fragment()
 {
     private lateinit var binding: WeatherFragmentBinding
-
     private val weatherViewModel by viewModels<WeatherViewModel>()
-
     private lateinit var currentWeatherAdapter: CurrentWeatherAdapter
 
     override fun onStart()
@@ -45,11 +43,9 @@ class WeatherFragment : Fragment()
         super.onActivityCreated(savedInstanceState)
 
         setHasOptionsMenu(true)
-
         setupListOfSelectedCitiesObserver()
 
         binding.viewPager2.reduceDragSensitivity()
-
 
         binding.swipeRefreshLayout.setOnRefreshListener {
             setupListOfSelectedCitiesObserver()
@@ -69,6 +65,9 @@ class WeatherFragment : Fragment()
                 for (selectedCity in _listOfCities)
                 {
                     observeWeather(selectedCity.first)
+
+                    // Implementation with Flow
+                    weatherViewModel.getWeatherOfCity(selectedCity.first)
                 }
 
                 initViewPager(_listOfCities)
@@ -161,7 +160,6 @@ class WeatherFragment : Fragment()
             else -> super.onOptionsItemSelected(item)
         }
     }
-
     private fun setupSpinner(show: Boolean)
     {
         binding.swipeRefreshLayout.isRefreshing = show

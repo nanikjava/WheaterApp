@@ -52,7 +52,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     /** Constraintlayout **/
-    implementation "androidx.constraintlayout:constraintlayout:2.0.0-rc1"
+    implementation "androidx.constraintlayout:constraintlayout:2.0.0"
 
     /** Navigation **/
     implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"

@@ -1,10 +1,12 @@
 package com.inspirecoding.wheaterapp.repository
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.distinctUntilChanged
 import com.inspirecoding.wheaterapp.model.CurrentWeather
 import com.inspirecoding.wheaterapp.model.ForecastWeather
 import com.inspirecoding.wheaterapp.model.Resource
+import com.inspirecoding.wheaterapp.model.State
 import com.inspirecoding.wheaterapp.repository.local.CurrentWeatherDao
 import com.inspirecoding.wheaterapp.repository.local.ForecastWeatherDao
 import com.inspirecoding.wheaterapp.repository.remote.BaseDataSource
@@ -13,6 +15,8 @@ import com.inspirecoding.wheaterapp.util.Common
 import com.inspirecoding.wheaterapp.util.SettingsValues
 import com.inspirecoding.wheaterapp.util.combineWith
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
 import retrofit2.Response
 import timber.log.Timber
 import javax.inject.Inject
@@ -95,10 +99,78 @@ class WeatherRepositoryImpl @Inject constructor (
             }
         }
     ).distinctUntilChanged()
+
     fun getWeather(cityName: String) : LiveData<Pair<CurrentWeather?, ForecastWeather?>>
     {
         return currentWeatherDao.getCurrentWeather(cityName).combineWith(forecastWeatherDao.getForecastWeather(cityName)) {  resultCurrentWeather, resultForecastWeather ->
             Pair(resultCurrentWeather, resultForecastWeather)
         }
     }
+
+
+
+
+
+    override fun getWeatherOfCity(currentWeather: CurrentWeather) : Flow<State<Pair<CurrentWeather?, ForecastWeather?>>>
+    {
+        return object : NetworkBoundRepository<Pair<CurrentWeather?, ForecastWeather?>, Pair<CurrentWeather?, ForecastWeather?>>()
+        {
+            override suspend fun saveRemoteData(response: Pair<CurrentWeather?, ForecastWeather?>)
+            {
+                val _currentWeather = response.first
+                val _forecastWeather = response.second
+                _currentWeather?.let {
+                    _currentWeather.position = currentWeather.position
+                    currentWeatherDao.insertCurrentWeather(_currentWeather)
+                }
+                _forecastWeather?.let {
+                    _forecastWeather.cityName = currentWeather.name
+                    Timber.d("${_forecastWeather.cityName}")
+                    forecastWeatherDao.insertForecastWeather(_forecastWeather)
+                }
+            }
+
+            override fun fetchFromLocal(): Flow<Pair<CurrentWeather?, ForecastWeather?>> = getWeather(currentWeather.name).asFlow()
+
+            override suspend fun fetchFromRemote(): Response<Pair<CurrentWeather?, ForecastWeather?>> {
+                return runBlocking {
+                    val currentWeatherEndUrl = Common.createEndUrl_currentWeather (
+                        currentWeather.name,
+                        SettingsValues.unit.value!!)
+                    val forecastWeatherEndUrl = Common.createEndUrl_forecastWeather (
+                        currentWeather.coord.latitude,
+                        currentWeather.coord.longitude,
+                        SettingsValues.unit.value!!)
+                    val currentWeatherResponse = async { weatherServiceAPI.getCurrentWeather(currentWeatherEndUrl) }
+                    val forecastWeatherResponse = async { weatherServiceAPI.getForecastWeather(forecastWeatherEndUrl) }
+                    Response.success(Pair(currentWeatherResponse.await().body(), forecastWeatherResponse.await().body()))
+                }
+            }
+        }.asFlow().flowOn(Dispatchers.IO)
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

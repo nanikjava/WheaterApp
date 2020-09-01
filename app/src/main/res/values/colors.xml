@@ -15,6 +15,9 @@
 
     <color name="values_colors">#000000</color>
 
+    <color name="colorStatusConnected">#43A047</color>
+    <color name="colorStatusNotConnected">#D32F2F</color>
+
     <color name="grey">#CECECE</color>
     <color name="light_blue">#B7D4EA</color>
     <color name="yellow">#FFB100</color>

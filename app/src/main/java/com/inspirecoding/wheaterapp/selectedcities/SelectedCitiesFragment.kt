@@ -1,10 +1,13 @@
 package com.inspirecoding.wheaterapp.selectedcities
 
+import android.content.res.ColorStateList
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.ColorRes
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -15,6 +18,7 @@ import com.inspirecoding.wheaterapp.R
 import com.inspirecoding.wheaterapp.databinding.SelectedCitiesFragmentBinding
 import com.inspirecoding.wheaterapp.model.CurrentWeather
 import com.inspirecoding.wheaterapp.selectedcities.adapter.SelectedCitiesAdapter
+import com.inspirecoding.wheaterapp.util.NetworkUtils
 import com.inspirecoding.wheaterapp.util.observeOnce
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
@@ -82,6 +86,8 @@ class SelectedCitiesFragment : Fragment()
         setupListOfSelectedCitiesObserver()
         setupFabClick()
 
+        handleNetworkChanges()
+
         itemTouchHelper_reOrder.attachToRecyclerView(binding.recyclerView)
     }
 
@@ -137,6 +143,30 @@ class SelectedCitiesFragment : Fragment()
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = selectedCitiesAdapter
+        }
+    }
+
+    private fun handleNetworkChanges()
+    {
+        NetworkUtils.getNetworkLiveData(binding.root.context).observe(viewLifecycleOwner, Observer { isConnected ->
+            binding.fab.isEnabled = isConnected
+
+            if(!isConnected)
+            {
+                setFabColor(R.color.grey)
+            }
+            else
+            {
+                setFabColor(R.color.colorPrimary)
+            }
+        })
+    }
+
+    private fun setFabColor(@ColorRes color: Int)
+    {
+        context?.let {_context ->
+            val getColor = ContextCompat.getColor(_context, color)
+            binding.fab.backgroundTintList = ColorStateList.valueOf(getColor)
         }
     }
 }

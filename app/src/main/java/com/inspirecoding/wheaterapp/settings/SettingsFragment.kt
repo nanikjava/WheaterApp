@@ -7,11 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.lifecycle.observe
+import com.inspirecoding.wheaterapp.R
 import com.inspirecoding.wheaterapp.databinding.FragmentSettingsBinding
-import com.inspirecoding.wheaterapp.util.Common
-import com.inspirecoding.wheaterapp.util.SettingsValues
+import com.inspirecoding.wheaterapp.util.*
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.layout_network_status.*
 
 @AndroidEntryPoint
 class SettingsFragment : Fragment()
@@ -56,6 +58,8 @@ class SettingsFragment : Fragment()
         /** Set the statuses of switches **/
         setupUnitObserver()
         setupDarkModeObserver()
+
+        handleNetworkChanges()
     }
 
     private fun setupUnitObserver()
@@ -77,5 +81,23 @@ class SettingsFragment : Fragment()
         SettingsValues.darkMode.observe(viewLifecycleOwner) { _darkMode ->
             binding.switchDarkMode.isChecked = _darkMode
         }
+    }
+
+    private fun handleNetworkChanges()
+    {
+        NetworkUtils.getNetworkLiveData(binding.root.context).observe(viewLifecycleOwner, Observer { isConnected ->
+            binding.switchUnit.isEnabled = isConnected
+
+            if(!isConnected)
+            {
+                binding.switchUnit.setThumbResource(R.drawable.switch_thumb_gray)
+                binding.switchUnit.setTrackResource(R.drawable.switch_track_gray)
+            }
+            else
+            {
+                binding.switchUnit.setThumbResource(R.drawable.switch_thumb_blue)
+                binding.switchUnit.setTrackResource(R.drawable.switch_track_blue)
+            }
+        })
     }
 }
