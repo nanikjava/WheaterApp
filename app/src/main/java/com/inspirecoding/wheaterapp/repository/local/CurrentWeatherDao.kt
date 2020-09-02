@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.inspirecoding.wheaterapp.model.CurrentWeather
 import com.inspirecoding.wheaterapp.util.Status
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CurrentWeatherDao
@@ -11,7 +12,11 @@ interface CurrentWeatherDao
     @Query ("SELECT * FROM CurrentWeather ORDER BY position ASC")
     suspend fun getAllCurrentWeather() : List<CurrentWeather>
     @Query ("SELECT * FROM CurrentWeather WHERE name = :cityName")
-    fun getCurrentWeather(cityName: String) : LiveData<CurrentWeather>
+    fun getCurrentWeatherLiveData(cityName: String) : LiveData<CurrentWeather>
+
+    @Query ("SELECT * FROM CurrentWeather WHERE position = 0")
+    fun getFirstCityWeatherSuspend() : Flow<CurrentWeather>?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCurrentWeather (currentWeather : CurrentWeather) : Long
     @Update

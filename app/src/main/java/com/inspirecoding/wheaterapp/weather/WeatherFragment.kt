@@ -1,5 +1,8 @@
 package com.inspirecoding.wheaterapp.weather
 
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
+import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -12,9 +15,11 @@ import com.inspirecoding.wheaterapp.R
 import com.inspirecoding.wheaterapp.databinding.WeatherFragmentBinding
 import com.inspirecoding.wheaterapp.model.CurrentWeather
 import com.inspirecoding.wheaterapp.model.ForecastWeather
+import com.inspirecoding.wheaterapp.util.Common
 import com.inspirecoding.wheaterapp.util.Status
 import com.inspirecoding.wheaterapp.util.reduceDragSensitivity
 import com.inspirecoding.wheaterapp.weather.adapter.CurrentWeatherAdapter
+import com.inspirecoding.wheaterapp.widget.CurrentWeatherWidget
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 
@@ -61,6 +66,8 @@ class WeatherFragment : Fragment()
             }
             else
             {
+                // Update the widget
+                refreshTodayLabel(_listOfCities[0].first)
 
                 for (selectedCity in _listOfCities)
                 {
@@ -164,4 +171,41 @@ class WeatherFragment : Fragment()
     {
         binding.swipeRefreshLayout.isRefreshing = show
     }
+
+    fun refreshTodayLabel(currentWeather: CurrentWeather)
+    {
+        context?.let { _context ->
+            val man = AppWidgetManager.getInstance(_context)
+            val ids = man.getAppWidgetIds(ComponentName(_context, CurrentWeatherWidget::class.java))
+
+            val updateIntent = Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE)
+            updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
+            updateIntent.putExtra(Common.CITY, currentWeather.name)
+            updateIntent.putExtra(Common.TEMP, currentWeather.main.temp)
+
+            val weatherDesc = Common.getWeatherDescription(
+                currentWeather.weather?.get(0)?.description, binding.root.context
+            )
+            updateIntent.putExtra(Common.WEATHER_DESC, weatherDesc.first)
+
+            _context.sendBroadcast(updateIntent)
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

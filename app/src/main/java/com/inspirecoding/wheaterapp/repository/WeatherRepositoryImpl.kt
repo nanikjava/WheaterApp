@@ -14,13 +14,14 @@ import com.inspirecoding.wheaterapp.repository.remote.WeatherServiceAPI
 import com.inspirecoding.wheaterapp.util.Common
 import com.inspirecoding.wheaterapp.util.SettingsValues
 import com.inspirecoding.wheaterapp.util.combineWith
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.runBlocking
 import retrofit2.Response
 import timber.log.Timber
 import javax.inject.Inject
-import kotlin.system.measureTimeMillis
 
 class WeatherRepositoryImpl @Inject constructor (
     private val weatherServiceAPI: WeatherServiceAPI,
@@ -102,7 +103,7 @@ class WeatherRepositoryImpl @Inject constructor (
 
     fun getWeather(cityName: String) : LiveData<Pair<CurrentWeather?, ForecastWeather?>>
     {
-        return currentWeatherDao.getCurrentWeather(cityName).combineWith(forecastWeatherDao.getForecastWeather(cityName)) {  resultCurrentWeather, resultForecastWeather ->
+        return currentWeatherDao.getCurrentWeatherLiveData(cityName).combineWith(forecastWeatherDao.getForecastWeather(cityName)) { resultCurrentWeather, resultForecastWeather ->
             Pair(resultCurrentWeather, resultForecastWeather)
         }
     }

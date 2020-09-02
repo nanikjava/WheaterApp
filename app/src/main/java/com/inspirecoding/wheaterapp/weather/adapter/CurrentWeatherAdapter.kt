@@ -8,10 +8,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.inspirecoding.wheaterapp.R
-import com.inspirecoding.wheaterapp.databinding.CurrentweatherDetailsBinding
 import com.inspirecoding.wheaterapp.databinding.ItemCurrentweatherBinding
 import com.inspirecoding.wheaterapp.model.CurrentWeather
-import com.inspirecoding.wheaterapp.model.Daily
 import com.inspirecoding.wheaterapp.model.ForecastWeather
 import com.inspirecoding.wheaterapp.util.Common
 import com.inspirecoding.wheaterapp.util.DateConverters

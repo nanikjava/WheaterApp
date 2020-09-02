@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">WheaterApp</string>
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="no_selected_city">No selected city</string>
 
     <string name="temperature_with_degree">%.0f°</string>
     <string name="value_with_percentage">%1$d %%</string>
