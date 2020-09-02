@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">WheaterApp</string>
-    
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    
+
     <string name="temperature_with_degree">%.0f°</string>
     <string name="value_with_percentage">%1$d %%</string>
     <string name="value_with_kmph">%.1f kmph</string>
@@ -16,37 +16,37 @@
 
 
     <!-- Thunderstorm -->
-    <string name="thunderstorm_with_light_rain">Thunderstorm with\nlight rain</string>
-    <string name="thunderstorm_with_rain">Thunderstorm\twith rain</string>
+    <string name="thunderstorm_with_light_rain">Thunderstorm with light rain</string>
+    <string name="thunderstorm_with_rain">Thunderstorm with rain</string>
     <string name="thunderstorm_with_heavy_rain">Thunderstorm with heavy rain</string>
     <string name="light_thunderstorm">Light thunderstorm</string>
     <string name="thunderstorm">Thunderstorm</string>
     <string name="heavy_thunderstorm">Heavy thunderstorm</string>
     <string name="ragged_thunderstorm">ragged thunderstorm</string>
-    <string name="thunderstorm_with_light_drizzle">Thunderstorm with\nlight drizzle</string>
+    <string name="thunderstorm_with_light_drizzle">Thunderstorm with light drizzle</string>
     <string name="thunderstorm_with_drizzle">Thunderstorm with drizzle</string>
     <string name="thunderstorm_with_heavy_drizzle">Thunderstorm with heavy drizzle</string>
     <!-- Drizzle -->
     <string name="light_intensity_drizzle">Light intensity drizzle</string>
     <string name="drizzle">Drizzle</string>
     <string name="heavy_intensity_drizzle">Heavy intensity drizzle</string>
-    <string name="light_intensity_drizzle_rain">Light intensity\ndrizzle rain</string>
+    <string name="light_intensity_drizzle_rain">Light intensity drizzle rain</string>
     <string name="drizzle_rain">Drizzle rain</string>
-    <string name="heavy_intensity_drizzle_rain">Heavy intensity\ndrizzle rain</string>
-    <string name="shower_rain_and_drizzle">Shower rain\nand drizzle</string>
-    <string name="heavy_shower_rain_and_drizzle">Heavy shower rain\nand drizzle</string>
+    <string name="heavy_intensity_drizzle_rain">Heavy intensity drizzle rain</string>
+    <string name="shower_rain_and_drizzle">Shower rain and drizzle</string>
+    <string name="heavy_shower_rain_and_drizzle">Heavy shower rain and drizzle</string>
     <string name="shower_drizzle">Shower drizzle</string>
     <!-- Rain -->
     <string name="light_rain">Light rain</string>
     <string name="moderate_rain">Moderate rain</string>
-    <string name="heavy_intensity_rain">Heavy\nintensity rain</string>
+    <string name="heavy_intensity_rain">Heavy intensity rain</string>
     <string name="very_heavy_rain">Very heavy rain</string>
     <string name="extreme_rain">Extreme rain</string>
     <string name="freezing_rain">Freezing rain</string>
-    <string name="light_intensity_shower_rain">Light intensity\nshower rain</string>
+    <string name="light_intensity_shower_rain">Light intensity shower rain</string>
     <string name="shower_rain">Shower rain</string>
-    <string name="heavy_intensity_shower_rain">Heavy intensity\nshower rain</string>
-    <string name="ragged_shower_rain">Ragged\nshower rain</string>
+    <string name="heavy_intensity_shower_rain">Heavy intensity shower rain</string>
+    <string name="ragged_shower_rain">Ragged shower rain</string>
     <!-- Snow -->
     <string name="light_snow">Light snow</string>
     <string name="snow">Snow</string>
@@ -128,6 +128,8 @@
 
     <string name="text_no_connectivity">No Connection</string>
     <string name="text_connectivity">Back Online</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 
 
 </resources>

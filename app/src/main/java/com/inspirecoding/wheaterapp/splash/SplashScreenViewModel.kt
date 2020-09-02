@@ -32,6 +32,8 @@ class SplashScreenViewModel @ViewModelInject constructor (
             sharedPreferencesRepository.getUnit()?.let { _unit ->
                 SettingsValues.setUnit(_unit)
             }
+        }
+        viewModelScope.launch(Dispatchers.Main) {
             sharedPreferencesRepository.getDarkMode()?.let { _darkMode ->
                 SettingsValues.setDarkMode(_darkMode)
             }
