@@ -14,8 +14,8 @@ interface CurrentWeatherDao
     @Query ("SELECT * FROM CurrentWeather WHERE name = :cityName")
     fun getCurrentWeatherLiveData(cityName: String) : LiveData<CurrentWeather>
 
-    @Query ("SELECT * FROM CurrentWeather WHERE position = 0")
-    fun getFirstCityWeatherSuspend() : Flow<CurrentWeather>?
+    @Query ("SELECT * FROM CurrentWeather ORDER BY Position LIMIT 1")
+    fun getFirstCityWeatherSuspend() : Flow<CurrentWeather>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCurrentWeather (currentWeather : CurrentWeather) : Long

@@ -49,7 +49,7 @@ data class CurrentWeather(
 
     @SerializedName("dt")
     @ColumnInfo(name = "dt")
-    val dt: Long? = null,
+    val dt: Long = 0,
 
     @SerializedName("sys")
     @Embedded

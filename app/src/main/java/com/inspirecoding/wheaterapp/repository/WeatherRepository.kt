@@ -20,6 +20,7 @@ interface WeatherRepository
     suspend fun updateCurrentWeather (currentWeather: CurrentWeather) : Int
     suspend fun deleteCurrentWeather (currentWeather: CurrentWeather) : Int
     suspend fun getAllCurrentWeather() : List<CurrentWeather>
+    suspend fun getFirstCityWeatherSuspend() : Flow<State<CurrentWeather>>
     suspend fun getCurrentWeatherTableSize() : Int
 
     // ForecastWeather
@@ -32,9 +33,4 @@ interface WeatherRepository
 
     // Observer functions
     fun observeWeather(currentWeather: CurrentWeather) : LiveData<Resource<Pair<CurrentWeather?, ForecastWeather?>>>
-
-
-
-
-    fun getWeatherOfCity(currentWeather: CurrentWeather) : Flow<State<Pair<CurrentWeather?, ForecastWeather?>>>
 }

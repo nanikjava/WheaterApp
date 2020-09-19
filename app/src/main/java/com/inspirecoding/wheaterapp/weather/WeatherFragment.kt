@@ -66,15 +66,9 @@ class WeatherFragment : Fragment()
             }
             else
             {
-                // Update the widget
-                refreshTodayLabel(_listOfCities[0].first)
-
                 for (selectedCity in _listOfCities)
                 {
                     observeWeather(selectedCity.first)
-
-                    // Implementation with Flow
-                    weatherViewModel.getWeatherOfCity(selectedCity.first)
                 }
 
                 initViewPager(_listOfCities)
@@ -170,26 +164,6 @@ class WeatherFragment : Fragment()
     private fun setupSpinner(show: Boolean)
     {
         binding.swipeRefreshLayout.isRefreshing = show
-    }
-
-    fun refreshTodayLabel(currentWeather: CurrentWeather)
-    {
-        context?.let { _context ->
-            val man = AppWidgetManager.getInstance(_context)
-            val ids = man.getAppWidgetIds(ComponentName(_context, CurrentWeatherWidget::class.java))
-
-            val updateIntent = Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE)
-            updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids)
-            updateIntent.putExtra(Common.CITY, currentWeather.name)
-            updateIntent.putExtra(Common.TEMP, currentWeather.main.temp)
-
-            val weatherDesc = Common.getWeatherDescription(
-                currentWeather.weather?.get(0)?.description, binding.root.context
-            )
-            updateIntent.putExtra(Common.WEATHER_DESC, weatherDesc.first)
-
-            _context.sendBroadcast(updateIntent)
-        }
     }
 
 

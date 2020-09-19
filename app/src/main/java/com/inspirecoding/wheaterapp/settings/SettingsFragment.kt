@@ -19,7 +19,6 @@ import kotlinx.android.synthetic.main.layout_network_status.*
 class SettingsFragment : Fragment()
 {
     private lateinit var binding: FragmentSettingsBinding
-
     private val settingsViewModel by viewModels<SettingsViewModel>()
 
     override fun onCreateView(layoutInflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?

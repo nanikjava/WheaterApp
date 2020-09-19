@@ -14,11 +14,8 @@ import com.inspirecoding.wheaterapp.repository.remote.WeatherServiceAPI
 import com.inspirecoding.wheaterapp.util.Common
 import com.inspirecoding.wheaterapp.util.SettingsValues
 import com.inspirecoding.wheaterapp.util.combineWith
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import retrofit2.Response
 import timber.log.Timber
 import javax.inject.Inject
@@ -59,6 +56,7 @@ class WeatherRepositoryImpl @Inject constructor (
     override fun getForecastWeatherLocal(cityName: String) = forecastWeatherDao.getForecastWeather(cityName)
     override suspend fun getAllForecastWeather(): List<ForecastWeather> = forecastWeatherDao.getAllForecastWeather()
     override fun getForecastWeatherTableSize() = forecastWeatherDao.getTableSize()
+
 
 
     override fun observeWeather(currentWeather: CurrentWeather)= resultLiveData(
@@ -108,70 +106,45 @@ class WeatherRepositoryImpl @Inject constructor (
         }
     }
 
-
-
-
-
-    override fun getWeatherOfCity(currentWeather: CurrentWeather) : Flow<State<Pair<CurrentWeather?, ForecastWeather?>>>
+    @ExperimentalCoroutinesApi
+    override suspend fun getFirstCityWeatherSuspend() : Flow<State<CurrentWeather>>
     {
-        return object : NetworkBoundRepository<Pair<CurrentWeather?, ForecastWeather?>, Pair<CurrentWeather?, ForecastWeather?>>()
+        var _currentWeather: CurrentWeather = CurrentWeather()
+        return object : NetworkBoundRepository<CurrentWeather, CurrentWeather>()
         {
-            override suspend fun saveRemoteData(response: Pair<CurrentWeather?, ForecastWeather?>)
+            override suspend fun saveRemoteData(currentWeather: CurrentWeather)
             {
-                val _currentWeather = response.first
-                val _forecastWeather = response.second
-                _currentWeather?.let {
-                    _currentWeather.position = currentWeather.position
-                    currentWeatherDao.insertCurrentWeather(_currentWeather)
-                }
-                _forecastWeather?.let {
-                    _forecastWeather.cityName = currentWeather.name
-                    Timber.d("${_forecastWeather.cityName}")
-                    forecastWeatherDao.insertForecastWeather(_forecastWeather)
-                }
+                currentWeather.position = _currentWeather.position
+                Timber.d("getFirstCityWeatherSuspend - ${currentWeather.position}")
+                currentWeatherDao.insertCurrentWeather(currentWeather)
             }
 
-            override fun fetchFromLocal(): Flow<Pair<CurrentWeather?, ForecastWeather?>> = getWeather(currentWeather.name).asFlow()
+            override fun fetchFromLocal(): Flow<CurrentWeather>
+            {
+                Timber.d("getFirstCityWeatherSuspend - fetchFromLocal")
+                val abcde = flow {
+                    currentWeatherDao.getFirstCityWeatherSuspend().map {
+                        Timber.d("getFirstCityWeatherSuspend - ${it}")
+                        _currentWeather = it
+                        emit(it)
+                    }.collect()
+                }
 
-            override suspend fun fetchFromRemote(): Response<Pair<CurrentWeather?, ForecastWeather?>> {
+                return abcde
+            }
+
+            override suspend fun fetchFromRemote(): Response<CurrentWeather>
+            {
                 return runBlocking {
+                    Timber.d("getFirstCityWeatherSuspend - ${_currentWeather.position}")
                     val currentWeatherEndUrl = Common.createEndUrl_currentWeather (
-                        currentWeather.name,
-                        SettingsValues.unit.value!!)
-                    val forecastWeatherEndUrl = Common.createEndUrl_forecastWeather (
-                        currentWeather.coord.latitude,
-                        currentWeather.coord.longitude,
-                        SettingsValues.unit.value!!)
+                        city = _currentWeather.name,
+                        unit = SettingsValues.unit.value!!
+                    )
                     val currentWeatherResponse = async { weatherServiceAPI.getCurrentWeather(currentWeatherEndUrl) }
-                    val forecastWeatherResponse = async { weatherServiceAPI.getForecastWeather(forecastWeatherEndUrl) }
-                    Response.success(Pair(currentWeatherResponse.await().body(), forecastWeatherResponse.await().body()))
+                    Response.success(currentWeatherResponse.await().body())
                 }
             }
         }.asFlow().flowOn(Dispatchers.IO)
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

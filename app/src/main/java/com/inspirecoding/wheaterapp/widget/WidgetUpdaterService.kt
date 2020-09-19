@@ -1,34 +1,40 @@
 package com.inspirecoding.wheaterapp.widget
 
+import android.app.Notification
 import android.app.Service
-import android.appwidget.AppWidgetManager
 import android.content.Intent
+import android.os.Build
 import android.os.IBinder
-import com.inspirecoding.wheaterapp.util.Common
+import com.inspirecoding.wheaterapp.repository.WeatherRepositoryImpl
+import dagger.hilt.android.AndroidEntryPoint
+import timber.log.Timber
+import javax.inject.Inject
 
+
+@AndroidEntryPoint
 class WidgetUpdaterService : Service()
 {
+    @Inject
+    lateinit var weatherRepositoryImpl: WeatherRepositoryImpl
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int
     {
-        val appWidgetManager = AppWidgetManager.getInstance(this)
-        val allWidgetIds = intent?.getIntArrayExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS)
-        val city = intent?.getStringExtra(Common.CITY)
-        val temp = intent?.getStringExtra(Common.TEMP)
-        val weatherDesc = intent?.getStringExtra(Common.WEATHER_DESC)
+        collectData(this, weatherRepositoryImpl)
 
-        if(allWidgetIds != null)
+        Timber.d("WidgetUpdaterService - onStartCommand")
+
+        return START_STICKY
+    }
+
+    override fun onCreate()
+    {
+        super.onCreate()
+
+        val NOTIFICATION_ID = (System.currentTimeMillis() % 10000).toInt()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
         {
-            for (appWidgetId in allWidgetIds)
-            {
-//                updateAppWidget(
-////                    this,
-////                    appWidgetManager,
-////                    appWidgetId,
-////                    city, temp, weatherDesc)
-            }
+            startForeground(NOTIFICATION_ID, Notification.Builder(this).build())
         }
-
-        return super.onStartCommand(intent, flags, startId)
     }
 
     override fun onBind(intent: Intent): IBinder?

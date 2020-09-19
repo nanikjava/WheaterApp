@@ -14,10 +14,6 @@ object Common
     const val METRIC = "metric"
     const val IMPERIAL = "imperial"
 
-    const val CITY = "city"
-    const val TEMP = "temp"
-    const val WEATHER_DESC = "weather_desc"
-
     val ANIMATION_DURATION = 2000.toLong()
 
     fun createEndUrl_currentWeather(city: String, unit: String) : String

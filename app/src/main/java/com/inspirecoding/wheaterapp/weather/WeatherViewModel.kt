@@ -51,20 +51,4 @@ class WeatherViewModel @ViewModelInject constructor (
         return pair
     }
     fun observeWeather(currentWeather: CurrentWeather) = weatherRepository.observeWeather(currentWeather)
-
-
-    private val _currentWeather = MutableLiveData<State<Pair<CurrentWeather?, ForecastWeather?>>>()
-    val currentWeather: LiveData<State<Pair<CurrentWeather?, ForecastWeather?>>> = _currentWeather
-    fun getWeatherOfCity(currentWeather: CurrentWeather)
-    {
-        viewModelScope.launch(Dispatchers.IO){
-            weatherRepository.getWeatherOfCity(currentWeather).collect {
-//                Timber.d("collect: ${it}")
-//                _currentWeather.postValue(it)
-            }
-        }
-    }
-
-
-
 }

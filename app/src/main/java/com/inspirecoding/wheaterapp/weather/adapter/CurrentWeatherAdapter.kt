@@ -72,12 +72,10 @@ class CurrentWeatherAdapter (
         @SuppressLint("ClickableViewAccessibility")
         fun bind (weather: Pair<CurrentWeather, ForecastWeather>)
         {
-            Timber.d("${weather.first}")
-
             binding.city = weather.first.name
             binding.main = weather.first.main
 
-            weather.first.dt?.let { _dateTime ->
+            weather.first.dt.let { _dateTime ->
                 binding.date = DateConverters.getFormattedTimeAgo(binding.root.context, _dateTime * 1000)
             }
 
